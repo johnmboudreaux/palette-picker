@@ -1,4 +1,4 @@
-(function($){
+(function(){
   function init() {
     $.ajax({
       url: '/api/v1/projectFolders',
@@ -29,4 +29,4 @@
   $(init);
 
 
-})(window.jquery);
+})();
