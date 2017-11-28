@@ -35,7 +35,34 @@ header  {
 .logo {
   height: 70px;
   width: 70px;
-  border-radius: 3px;
+}
+
+.palette-container {
+  background-image: url('../assets/background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  height: 500px;
+  width: 100%;
+  position: relative;
+}
+
+.palette-color-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border: 1px solid black;
+  width: 20%;
+  height: 100%;
+  /*position: relative;
+  overflow: hidden;*/
+}
+
+.hex-number {
+  background-color: #DCE9F5;
+  height: 23px;
+  width: 66%;
+  margin-bottom: 3px;
 }
 
 body {
