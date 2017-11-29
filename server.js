@@ -11,15 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/node_modules'));
 
-app.locals.projects = [{
-  id: 0,
-  name: 'project1',
-  palettes: [{
-    id: 0,
-    projectId: 0,
-    colors: ['fffff1', 'fffff2', 'fffff3', 'fffff4', 'fffff5']
-  }]
-}];
+app.locals.title = 'Palette Picker'
 
 app.get('/', (request, response) => {
   response.sendFile(__dirname + '/public/index.html');
