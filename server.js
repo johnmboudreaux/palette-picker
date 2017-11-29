@@ -25,7 +25,7 @@ app.get('/', (request, response) => {
   response.sendFile(__dirname + '/public/index.html');
 });
 
-app.get('/api/v1/projectFolders', (request, response) => {
+app.get('/api/v1/projects', (request, response) => {
   response.status(200).json(app.locals.projects);
 });
 

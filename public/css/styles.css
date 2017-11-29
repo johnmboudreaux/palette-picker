@@ -42,8 +42,9 @@ header  {
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
-  height: 500px;
+  height: 350px;
   width: 100%;
+  margin-bottom: 20px;
   position: relative;
 }
 
@@ -54,15 +55,64 @@ header  {
   border: 1px solid black;
   width: 20%;
   height: 100%;
-  /*position: relative;
-  overflow: hidden;*/
 }
 
 .hex-number {
   background-color: #DCE9F5;
+  font-weight: 400;
   height: 23px;
   width: 66%;
   margin-bottom: 3px;
+  text-align: center;
+}
+
+.project-controls {
+  display: flex;
+  height: 50px;
+  justify-content: flex-start;
+  -webkit-box-shadow: 0 10px 5px #888888;
+  -moz-box-shadow: 0 10px 5px #888888;
+  box-shadow: 0 5px 5px #888888;
+  margin-bottom: 10px
+}
+
+.generate-palette-button {
+  background-color: #53E883;
+  border-radius: 3px;
+  height: 30px;
+  width: 100px;
+  margin-right: 50px;
+}
+
+.generate-palette-button:hover {
+  background-color: #FFEF6E;
+}
+
+.project-input {
+  height: 30px;
+  width: 250px;
+  margin: 0 2px 0 10px;
+}
+
+.project-button {
+  background-color: #53E883;
+  height: 30px;
+  width: 100px;
+}
+
+.project-button:hover {
+  background-color: #FFEF6E;
+}
+
+.parent-project-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.project-container-title {
+  font-size: 35px;
+  margin-bottom: 10px;
 }
 
 body {
