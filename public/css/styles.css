@@ -1,0 +1,121 @@
+* {
+  box-sizing: border-box;
+  margin: 0px;
+}
+
+header  {
+  width: 100%;
+  height: 90px;
+  background: white;
+  box-shadow: 0px 2px 20px black;
+  top: 18px;
+  z-index: 100;
+  text-align: center;
+}
+
+.header-container {
+  width: 270px;
+  height: 100%;
+  margin: auto;
+}
+
+.header-title {
+  width: 174px;
+  height: 100%;
+  display: inline-block;
+}
+
+.header-logo {
+  width: 96px;
+  height: 100%;
+  display: inline-block;
+  float: right;
+}
+
+.logo {
+  height: 70px;
+  width: 70px;
+}
+
+.palette-container {
+  background-image: url('../assets/background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  height: 350px;
+  width: 100%;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.palette-color-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border: 1px solid black;
+  width: 20%;
+  height: 100%;
+}
+
+.hex-number {
+  background-color: #DCE9F5;
+  font-weight: 400;
+  height: 23px;
+  width: 66%;
+  margin-bottom: 3px;
+  text-align: center;
+}
+
+.project-controls {
+  display: flex;
+  height: 50px;
+  justify-content: flex-start;
+  -webkit-box-shadow: 0 10px 5px #888888;
+  -moz-box-shadow: 0 10px 5px #888888;
+  box-shadow: 0 5px 5px #888888;
+  margin-bottom: 10px
+}
+
+.generate-palette-button {
+  background-color: #53E883;
+  border-radius: 3px;
+  height: 30px;
+  width: 100px;
+  margin-right: 50px;
+}
+
+.generate-palette-button:hover {
+  background-color: #FFEF6E;
+}
+
+.project-input {
+  height: 30px;
+  width: 250px;
+  margin: 0 2px 0 10px;
+}
+
+.project-button {
+  background-color: #53E883;
+  height: 30px;
+  width: 100px;
+}
+
+.project-button:hover {
+  background-color: #FFEF6E;
+}
+
+.parent-project-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.project-container-title {
+  font-size: 35px;
+  margin-bottom: 10px;
+}
+
+body {
+  background-color: lightgrey;
+  font-family: 'Hammersmith One', sans-serif;
+}

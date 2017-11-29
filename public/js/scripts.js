@@ -1,32 +1,27 @@
-(function($){
-  function init() {
-    $.ajax({
-      url: '/api/v1/projectFolders',
-      method: 'GET',
-      dataType: 'json'
-    }).done(function(response) {
-      console.log(response);
-    })
-      .fail(function(error) {
-        console.log(error);
-      });
+const generateRandomHex = () => {
+  const value = Math.floor(Math.random() * 255).toString(16);
 
-    $('#button').click(function() {
-      $.ajax({
-        url: '/api/v1/createProject',
-        method: 'POST',
-        dataType: 'json',
-        projectData: {id: 1, name: 'project2', palettes: [] }
-      }).done(function(response) {
-        console.log(response);
-      })
-        .fail(function(error) {
-          console.log(error);
-        });
-    });
+  return value.length === 1 ? '0' + value : value;
+};
+
+const generateColor = () => {
+  const red = generateRandomHex();
+  const green = generateRandomHex();
+  const blue = generateRandomHex();
+
+  return `#${red}${green}${blue}`;
+};
+
+const setColor = (color, position) => {
+  $('.palette-' + position).find('h3').text(color);
+  $('.palette-' + position).css('background', color);
+};
+
+
+const setAllColors = () => {
+  for (var i = 1; i < 6; i++) {
+    setColor(generateColor(), i);
   }
+};
 
-  $(init);
-
-
-})(window.jquery);
+setAllColors();
