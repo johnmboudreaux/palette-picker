@@ -14,7 +14,7 @@
   <header>
     <div class="header-container">
       <div class="header-title">
-        <h1>Palette Picker</h1>
+        <h1 class="title">Palette Picker</h1>
       </div>
       <div class="header-logo">
         <img class="logo" alt="colorful wheel" src="./assets/color-wheel.jpg"/>
@@ -40,23 +40,42 @@
         <h3 class="hex-number"></h3>
       </div>
     </section>
-    <section class="project-controls">
+    <div>
       <button class="generate-palette-button" id="generate-button">Generate Palette</button>
-      <input class="project-input" id="save-project-input" type="text" placeholder="Save Project">
-      <button class="project-button" id="save-project-button">Save Project</button>
-    </section>
+    </div>
   </main>
 
-  <main>
-    <section class="parent-project-container">
-      <h1 class="project-container-title">Projects</h1>
-      <div class="child-project-container">
-        <h2>Wow Such Empties</h2>
+  <aside>
+
+    <section class="left-side">
+      <h1 class="creat-project-container">Create Projects</h1>
+      <div>
+        <input class="project-input" id="save-project-input" type="text" placeholder="Save Project">
+        <button class="project-button" id="save-project-button">Save Project</button>
+      </div>
+      <div>
+        <input class="palette-input" id="save-palette-input" type="text" placeholder="Save Palette">
+        <button class="palette-button" id="save-pallete-button">Save Palette</button>
       </div>
     </section>
-  </main>
 
-<script src="js/scripts.js"></script>
+    <section class="right-side">
+      <div class="palette-template">
+        <h1>Saved Projects</h1>
+        <h5></h5>
+        <div class="color-palette">
+          <div class="color-swatch"></div>
+          <div class="color-swatch"></div>
+          <div class="color-swatch"></div>
+          <div class="color-swatch"></div>
+          <div class="color-swatch"></div>
+        </div>
+      </div>
+    </section>
+
+  </aside>
+
 <script src="js/fetch-calls.js"></script>
+<script src="js/scripts.js"></script>
 </body>
 </html>

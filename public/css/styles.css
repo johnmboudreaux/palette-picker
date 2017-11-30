@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  font-family: 'Hammersmith One', sans-serif;
   margin: 0px;
 }
 
@@ -11,6 +12,11 @@ header  {
   top: 18px;
   z-index: 100;
   text-align: center;
+}
+
+.title {
+  font-size: 1.7em;
+  margin-top: 10px;
 }
 
 .header-container {
@@ -60,21 +66,22 @@ header  {
 
 .hex-number {
   background-color: #DCE9F5;
+  font-size: 1em;
   font-weight: 400;
   height: 23px;
   width: 66%;
   margin-bottom: 3px;
+  padding-top: 3px;
   text-align: center;
 }
 
 .project-controls {
   display: flex;
-  height: 50px;
-  justify-content: flex-start;
-  -webkit-box-shadow: 0 10px 5px #888888;
+  width: 50vw;
+  /*-webkit-box-shadow: 0 10px 5px #888888;
   -moz-box-shadow: 0 10px 5px #888888;
   box-shadow: 0 5px 5px #888888;
-  margin-bottom: 10px
+  margin-bottom: 10px*/
 }
 
 .generate-palette-button {
@@ -89,34 +96,65 @@ header  {
   background-color: #FFEF6E;
 }
 
-.project-input {
+.project-input,
+.palette-input {
   height: 30px;
-  width: 250px;
+  width: 65%;
   margin: 0 2px 0 10px;
 }
 
-.project-button {
+.project-button,
+.palette-button {
   background-color: #53E883;
   height: 30px;
-  width: 100px;
+  width: 85px;
 }
 
-.project-button:hover {
+.project-button:hover,
+.palette-button:hover {
   background-color: #FFEF6E;
 }
 
-.parent-project-container {
+.left-side {
+  border: solid 1px;
+  width: 50vw;
+}
+
+.right-side {
+  border: solid 1px;
+  width: 50vw;
+}
+
+.palette-template h1 {
+  font-size: 20px;
+  margin: 10px auto 10px auto;
+  text-align: center;
+}
+
+.color-palette {
   display: flex;
-  align-items: center;
-  flex-direction: column;
+  flex-direction: row;
+  height: 30px;
+  width: 60%;
+  margin: 0 auto 0 auto;
 }
 
-.project-container-title {
-  font-size: 35px;
-  margin-bottom: 10px;
+.color-swatch {
+  border: solid 1px;
+  border-radius: 1em;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  height: 2em;
+  width: 100%;
 }
 
-body {
-  background-color: lightgrey;
-  font-family: 'Hammersmith One', sans-serif;
+.creat-project-container {
+  font-size: 20px;
+  margin: 10px auto 10px auto;
+  text-align: center;
+}
+
+aside {
+  display: flex;
+  flex-wrap: wrap;
 }

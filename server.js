@@ -1,4 +1,4 @@
-
+/*eslint-disable */
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
@@ -103,6 +103,24 @@ app.get('/api/v1/projects/:id', (request, response) => {
     });
 });
 
+app.get('/api/v1/projects/:id/palettes', (request, response) => {
+  const { id } = request.params;
+
+  database('palettes').where('projectId', id).select()
+    .then( palettes => {
+      if (palettes.length) {
+        return response.status(201).json(palettes);
+      } else {
+        return response.status(404).json({
+          error: `Could not locate palettes with id ${id} property`
+        });
+      }
+    })
+    .catch(error => {
+      return response.status(500).json({error});
+    });
+});
+
 app.post('/api/v1/projects', (request, response) => {
   const project = request.body;
 
@@ -147,31 +165,24 @@ app.post('/api/v1/projects/:id/palettes', (request, response) => {
     });
 });
 
-
-
-app.get('/api/v1/projects/:id/palettes', (request, response) => {
+app.delete('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
 
-  database('palettes').where('projectId', id).select()
-    .then( palettes => {
-      if (palettes.length) {
-        return response.status(201).json(palettes);
-      } else {
-        return response.status(404).json({
-          error: `Could not locate palettes with id ${id} property`
-        });
-      }
-    })
+  database('palettes').where('id', id).delete()
+    .then(response => response.status(204).json({ id }))
     .catch(error => {
-      return response.status(500).json({error});
+      return response.status(500).json({ error });
     });
 });
 
+app.delete('/api/v1/projects/:id', (request, response) => {
+  const { id } = request.params;
 
-
-
-app.delete('/api/v1/deletePalette', (request, response) => {
-  response.status(200).json();
+  database('projects').where('id', id).delete()
+    .then(response => response.status(204).json({ id }))
+    .catch(error => {
+      response.status(500).json({error});
+    });
 });
 
 app.listen(app.get('port'), () => {
