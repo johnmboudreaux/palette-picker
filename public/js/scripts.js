@@ -17,7 +17,6 @@ const setColor = (color, position) => {
   $('.palette-' + position).css('background', color);
 };
 
-
 const setAllColors = () => {
   for (var i = 1; i < 6; i++) {
     setColor(generateColor(), i);
@@ -25,3 +24,13 @@ const setAllColors = () => {
 };
 
 setAllColors();
+
+const loadProjects = async () => {
+  const allProjects = await getProjects();
+  
+  console.log(allProjects);
+};
+
+loadProjects();
+
+$('#generate-button').click(setAllColors);
