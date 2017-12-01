@@ -77,7 +77,6 @@ header  {
   border-radius: 5px;
   font-size: .8em;
   font-weight: 400;
-  /*height: 23px;*/
   margin-bottom: 4px;
   opacity: .7;
   padding: 3px 5px 0 5px;
@@ -87,6 +86,10 @@ header  {
 .project-controls {
   display: flex;
   width: 50vw;
+}
+
+.controls {
+
 }
 
 .generate-button-container {
@@ -99,10 +102,11 @@ header  {
   align-self: center;
   background-color: #53E883;
   border-radius: 3px;
+  box-shadow: 0 0 20px #2986E5;
   height: 30px;
   width: 30%;
   margin: 0 auto 15px auto;
-  box-shadow: 0 0 20px #2986E5;
+  padding-top: 5px;
 }
 
 .generate-palette-button:hover {
@@ -111,9 +115,14 @@ header  {
 
 .project-input,
 .palette-input {
+  border-radius: 4px;
   height: 30px;
   width: 65%;
-  margin: 0 2px 30px 10px;
+  margin: 0 -5px 30px 0;
+}
+
+.project-controls {
+  margin-left: 10px;
 }
 
 .create-project-button,
@@ -122,6 +131,7 @@ header  {
   box-shadow: 0 0 10px #2986E5;
   height: 30px;
   width: 85px;
+  padding-top: 5px;
 }
 
 .create-project-button:hover,
@@ -176,13 +186,27 @@ header  {
 
 .create-project-title {
   font-size: 20px;
-  margin: 0 0 5px 10px;
   text-align: center;
+}
+
+.project-title {
+  margin: 10px;
+}
+
+.drop-select {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px
 }
 
 .left-border {
   border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px; }
+  border-bottom-left-radius: 5px;
+}
+
+#project-selector {
+  width: 65%;
+}
 
 aside {
   display: flex;
