@@ -43,9 +43,8 @@ $(function() {
 
   function toggleLock(target) {
     const lock = $(target);
-    console.log(lock);
+    
     if (lock.attr('src') === '../assets/padlock-open.png') {
-      console.log('clicked');
       lock.attr('src', './assets/padlock-closed.png');
       lock.closest('.palette-color-container').addClass('locked');
     } else {
