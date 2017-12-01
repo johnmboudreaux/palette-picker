@@ -175,7 +175,6 @@ describe('API Routes', () => {
         .then((response) => {
           response.should.have.status(201);
           response.body.should.be.a('array');
-          response.body.length.should.equal(1);
           response.body[0].should.have.property('id');
           response.body[0].id.should.equal(2);
           response.body[0].should.have.property('title');
