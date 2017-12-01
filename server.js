@@ -3,14 +3,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 
-//variable that lets us use dynamic environments defults to dev in none found
 const environment = process.env.NODE_ENV || 'development';
-//configs knex environment
 const configuration = require('./knexfile')[environment];
-//knex is bridging  to  db
 const database = require('knex')(configuration);
 
-//sets port either the dynamic port or the localhost if no dev port is found
 app.set('port', process.env.PORT || 3000);
 
 app.use(bodyParser.json());
@@ -119,7 +115,6 @@ app.get('/api/v1/projects/:id/palettes', (request, response) => {
 app.post('/api/v1/projects', (request, response) => {
   const project = request.body;
 
-  // check for required parameter to mke sure that all needed info is available from the request
   for (let requiredParameter of ['title']) {
     if (!project[requiredParameter]) {
       return response.status(422).json({
@@ -163,7 +158,7 @@ app.post('/api/v1/projects/:id/palettes', (request, response) => {
 
 app.delete('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
-  
+
   database('palettes').where('id', id).del()
   .then(length => {
     console.log(length);
