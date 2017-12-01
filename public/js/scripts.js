@@ -81,6 +81,11 @@ $(function() {
       body: JSON.stringify(postBody)
     }).then(response => response.json()).then(parsedResponse => {
       $('#save-projects').html(parsedResponse.name);
+      $('#project-selector').append($('<option>', {
+        value: parsedResponse.id,
+        text: parsedResponse.name,
+        selected: true
+      }))
     });
   }
 
