@@ -143,15 +143,28 @@ header  {
   text-align: center;
 }
 
-.color-palette {
+.swatch-container {
+  flex-direction: row;
   width: 50%;
 }
 
+.dynamic-swatch-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .color-swatch {
-  background-color: lightgrey;
-  display: inline-block;
   height: 2em;
-  width: 20px;
+  width: 20%;
+}
+
+.colors {
+  width: 100%;
+  display: flex;
+}
+
+.swatch-title {
+  font-size: 20px;
 }
 
 .delete-button {

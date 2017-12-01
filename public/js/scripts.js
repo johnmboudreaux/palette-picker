@@ -1,7 +1,7 @@
 $(function() {
 
   $('#generate-button').click(setAllColors);
-  $('#save-project-button').click(setProject);
+  $('#save-project-button').click(checkProjectName);
   $('#save-palette-button').click(createPalette);
   $('body').on('click', '#swatch-delete-button', deletePalette)
   $('.palette-container').on('click', '.lock', (event) => toggleLock(event.target))
@@ -57,8 +57,7 @@ $(function() {
     console.log(allProjects);
   }
 
-  function setProject() {
-    let projectName = $('#save-project-input').val();
+  function setProject(projectName) {
     let postBody = {
       'title': projectName
     };
@@ -73,6 +72,20 @@ $(function() {
     }).then(response => response.json()).then(parsedResponse => {
       $('#save-projects').html(parsedResponse.name);
     });
+  }
+
+  function checkProjectName() {
+    const projectTitle = $('.save-project-input').val();
+
+    fetch(`/api/v1/projects/`)
+      .then(response => response.json())
+      .then(projects => {
+        const match = projects.find(project => projectTitle === project.title);
+        if (!match) {
+          setProject(projectTitle);
+        }
+        alert('Duplicate project names not allowed.');
+      });
   }
 
   function createPalette() {
@@ -112,14 +125,17 @@ $(function() {
             </div>`);
         if (parsedResponse) {
           parsedResponse.forEach((item) => {
-            $('#project-palette' + palette.id).append(`<div>
-              <h5>${item.name}</h5>
-                <div class="color-swatch left-border" style="background: ${item.color1}"></div>
-                <div class="color-swatch" style="background: ${item.color2}"></div>
-                <div class="color-swatch" style="background: ${item.color3}"></div>
-                <div class="color-swatch" style="background: ${item.color4}"></div>
-                <div class="color-swatch right-border" style="background: ${item.color5}"></div>
-                <button class="delete-button" id="swatch-delete-button" data-palette-id="${item.id}">X</button>
+            $('#project-palette' + palette.id).append(
+              `<div class="dynamic-swatch-container">
+                <h5 class="swatch-title">${item.name}</h5>
+                <div class="colors">
+                  <div class="color-swatch left-border" style="background: ${item.color1}"></div>
+                  <div class="color-swatch" style="background: ${item.color2}"></div>
+                  <div class="color-swatch" style="background: ${item.color3}"></div>
+                  <div class="color-swatch" style="background: ${item.color4}"></div>
+                  <div class="color-swatch right-border" style="background: ${item.color5}"></div>
+                  <button class="delete-button" id="swatch-delete-button" data-palette-id="${item.id}">X</button>
+                </div>
               </div>`);
           });
         }
