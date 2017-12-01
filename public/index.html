@@ -25,57 +25,66 @@
   <main>
     <section class="palette-container">
       <div class="palette-color-container palette-1">
-        <h3 class="hex-number"></h3>
+        <div>
+          <h3 class="hex-number" id="color1"></h3>
+          <img class="lock" src="../assets/padlock-open.png" alt="open padlock">
+        </div>
       </div>
       <div class="palette-color-container palette-2">
-        <h3 class="hex-number"></h3>
+        <div>
+          <h3 class="hex-number" id="color2"></h3>
+          <img class="lock" src="../assets/padlock-open.png" alt="open padlock">
+        </div>
       </div>
       <div class="palette-color-container palette-3">
-        <h3 class="hex-number"></h3>
+        <div>
+          <h3 class="hex-number" id="color3"></h3>
+          <img class="lock" src="../assets/padlock-open.png" alt="open padlock">
+        </div>
       </div>
       <div class="palette-color-container palette-4">
-        <h3 class="hex-number"></h3>
+        <div>
+          <h3 class="hex-number" id="color4"></h3>
+          <img class="lock" src="../assets/padlock-open.png" alt="open padlock">
+        </div>
       </div>
       <div class="palette-color-container palette-5">
-        <h3 class="hex-number"></h3>
+        <div>
+          <h3 class="hex-number" id="color5"></h3>
+          <img class="lock" src="../assets/padlock-open.png" alt="open padlock">
+        </div>
       </div>
     </section>
-    <div>
-      <button class="generate-palette-button" id="generate-button">Generate Palette</button>
+    <div class="generate-button-container">
+      <button class="generate-palette-button" id="generate-button">Generate Palette To Begin</button>
     </div>
   </main>
 
   <aside>
 
     <section class="left-side">
-      <h1 class="creat-project-container">Create Projects</h1>
+      <h1 class="create-project-title">Create Projects</h1>
       <div>
         <input class="project-input" id="save-project-input" type="text" placeholder="Save Project">
-        <button class="project-button" id="save-project-button">Save Project</button>
+        <button class="create-project-button" id="save-project-button">Save Project</button>
       </div>
+      <h1 class="creat-project-title">Add Palette To Project</h1>
       <div>
+        <select name="drop-down" id="project-selector">
+          <option>Project Name Here</option>
+        </select>
         <input class="palette-input" id="save-palette-input" type="text" placeholder="Save Palette">
-        <button class="palette-button" id="save-pallete-button">Save Palette</button>
+        <button class="create-palette-button" id="save-palette-button">Save Palette</button>
       </div>
     </section>
 
     <section class="right-side">
-      <div class="palette-template">
-        <h1>Saved Projects</h1>
-        <h5></h5>
-        <div class="color-palette">
-          <div class="color-swatch"></div>
-          <div class="color-swatch"></div>
-          <div class="color-swatch"></div>
-          <div class="color-swatch"></div>
-          <div class="color-swatch"></div>
-        </div>
-      </div>
+      <h1>Saved Projects</h1>
+      <div class="swatch-container" id="projects"></div>
     </section>
 
   </aside>
 
-<script src="js/fetch-calls.js"></script>
 <script src="js/scripts.js"></script>
 </body>
 </html>

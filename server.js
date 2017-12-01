@@ -15,12 +15,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/node_modules'));
 
-app.locals.title = 'Palette Picker';
-
-app.get('/', (request, response) => {
-  response.sendFile(__dirname + '/public/index.html');
-});
-
 app.get('/api/v1/projects', (request, response) => {
   database('projects').select()
     .then( projects => {
@@ -68,15 +62,14 @@ app.get('/api/v1/palettes/:id', (request, response) => {
 });
 
 app.get('/api/v1/projects', (request, response) => {
-  const {id} = request.params;
 
-  database('projects').where('id', id).select()
+  database('projects').select()
     .then( project => {
       if (project.length) {
         return response.status(200).json(project);
       } else {
         return response.status(404).json({
-          error: `Could not find palette with id: ${id}`
+          error: `Could not find projects`
         });
       }
     })
@@ -111,9 +104,7 @@ app.get('/api/v1/projects/:id/palettes', (request, response) => {
       if (palettes.length) {
         return response.status(201).json(palettes);
       } else {
-        return response.status(404).json({
-          error: `Could not locate palettes with id ${id} property`
-        });
+        return response.status(200).json([]);
       }
     })
     .catch(error => {
@@ -134,7 +125,7 @@ app.post('/api/v1/projects', (request, response) => {
 
   database('projects').insert(project, 'id')
     .then(projectIds => {
-      return response.status(201).json({ id: projectIds[0]});
+      return response.status(201).json({ id: projectIds[0], name: project.title});
     })
     .catch(error => {
       return response.status(500).json({error});
@@ -143,10 +134,10 @@ app.post('/api/v1/projects', (request, response) => {
 
 app.post('/api/v1/projects/:id/palettes', (request, response) => {
   let palette = request.body;
+  console.log(palette);
   const { id } = request.params;
 
-  for ( let requiredParameter of ['name', 'color1', 'color2', 'color3',
-    'color4', 'color5']) {
+  for ( let requiredParameter of ['name', 'color1', 'color2', 'color3', 'color4', 'color5']) {
     if (!palette[requiredParameter]) {
       return response.status(422).json({
         error: `You are missing the ${requiredParameter} property`
@@ -156,7 +147,7 @@ app.post('/api/v1/projects/:id/palettes', (request, response) => {
 
   palette = Object.assign({}, palette, { projectId: id });
 
-  database('palettes').insert(palette, 'id')
+  database('palettes').insert(palette, '*')
     .then(paletteId => {
       return response.status(201).json({ id: paletteId[0]});
     })
@@ -168,10 +159,14 @@ app.post('/api/v1/projects/:id/palettes', (request, response) => {
 app.delete('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
 
-  database('palettes').where('id', id).delete()
-    .then(response => response.status(204).json({ id }))
+  database('palettes').where('id', id).del()
+  .then(length => {
+    console.log(length);
+    length ? response.sendStatus(204) : response.status(422)
+      .send({ error: 'nothing to delete with that id' });
+    })
     .catch(error => {
-      return response.status(500).json({ error });
+      response.status(500).json({ error });
     });
 });
 
@@ -188,3 +183,5 @@ app.delete('/api/v1/projects/:id', (request, response) => {
 app.listen(app.get('port'), () => {
   console.log(`App is running on ${app.get('port')}.`);
 });
+
+module.exports = app;
