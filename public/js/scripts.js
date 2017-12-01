@@ -58,16 +58,13 @@ $(function() {
 
     for (let i = 1; i < 6; i++) {
       const smallColor = $(palette).find(`.select-main-palette${i}`).css('background-color');
-      console.log(smallColor);
-      setColor(smallColor, i)
-      // $(`.palette-${i}`).css('background-color', smallColor);
+      setColor(smallColor, i);
     }
   }
 
   // async functions
   async function loadProjects() {
     const allProjects = await getProjects();
-    console.log(allProjects);
   }
 
   function setProject(projectName) {

@@ -1,5 +1,5 @@
 {
-  "parser": "babel-eslint",
+"parser": "babel-eslint",
   "extends": [
     "eslint:recommended"
   ],
@@ -29,7 +29,6 @@
     "func-call-spacing": ["error", "never"],
     "keyword-spacing": ["error", { "before": true, "after": true }],
     "no-duplicate-imports": "error",
-    "id-blacklist": ["error", "data", "err", "e", "cb", "callback", "payload", "obj", "arr"],
     "max-depth": ["warn", 4]
   },
   "globals": {
