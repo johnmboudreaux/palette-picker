@@ -123,9 +123,9 @@ app.post('/api/v1/projects', (request, response) => {
     }
   }
 
-  database('projects').insert(project, 'id')
-    .then(projectIds => {
-      return response.status(201).json({ id: projectIds[0], name: project.title});
+  database('projects').insert(project, '*')
+    .then(insertedProject => {
+      return response.status(201).json(insertedProject);
     })
     .catch(error => {
       return response.status(500).json({error});

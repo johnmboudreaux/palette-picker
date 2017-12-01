@@ -80,10 +80,10 @@ $(function() {
       method: 'POST',
       body: JSON.stringify(postBody)
     }).then(response => response.json()).then(parsedResponse => {
-      $('#save-projects').html(parsedResponse.name);
+      $('#save-projects').html(parsedResponse[0].title);
       $('#project-selector').append($('<option>', {
-        value: parsedResponse.id,
-        text: parsedResponse.name,
+        value: parsedResponse[0].id,
+        text: parsedResponse[0].title,
         selected: true
       }));
     });
