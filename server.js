@@ -3,10 +3,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 
+//variable that lets us use dynamic environments defults to dev in none found
 const environment = process.env.NODE_ENV || 'development';
+//configs knex environment
 const configuration = require('./knexfile')[environment];
+//
 const database = require('knex')(configuration);
 
+//sets port either the dynamic port or the localhost if no dev port is found
 app.set('port', process.env.PORT || 3000);
 
 app.use(bodyParser.json());
@@ -68,15 +72,14 @@ app.get('/api/v1/palettes/:id', (request, response) => {
 });
 
 app.get('/api/v1/projects', (request, response) => {
-  const {id} = request.params;
 
-  database('projects').where('id', id).select()
+  database('projects').select()
     .then( project => {
       if (project.length) {
         return response.status(200).json(project);
       } else {
         return response.status(404).json({
-          error: `Could not find palette with id: ${id}`
+          error: `Could not find projects`
         });
       }
     })
@@ -124,6 +127,7 @@ app.get('/api/v1/projects/:id/palettes', (request, response) => {
 app.post('/api/v1/projects', (request, response) => {
   const project = request.body;
 
+  // check for required parameter to mke sure that all needed info is available from the request
   for (let requiredParameter of ['title']) {
     if (!project[requiredParameter]) {
       return response.status(422).json({
@@ -134,7 +138,7 @@ app.post('/api/v1/projects', (request, response) => {
 
   database('projects').insert(project, 'id')
     .then(projectIds => {
-      return response.status(201).json({ id: projectIds[0]});
+      return response.status(201).json({ id: projectIds[0], name: project.title});
     })
     .catch(error => {
       return response.status(500).json({error});
@@ -143,6 +147,7 @@ app.post('/api/v1/projects', (request, response) => {
 
 app.post('/api/v1/projects/:id/palettes', (request, response) => {
   let palette = request.body;
+  console.log(palette);
   const { id } = request.params;
 
   for ( let requiredParameter of ['name', 'color1', 'color2', 'color3',
@@ -156,7 +161,7 @@ app.post('/api/v1/projects/:id/palettes', (request, response) => {
 
   palette = Object.assign({}, palette, { projectId: id });
 
-  database('palettes').insert(palette, 'id')
+  database('palettes').insert(palette, '*')
     .then(paletteId => {
       return response.status(201).json({ id: paletteId[0]});
     })
