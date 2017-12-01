@@ -36,8 +36,8 @@ $(function() {
     }
   }
 
-  function lockColor() {
-    
+  function toggleLock() {
+
   }
 
   // async functions
