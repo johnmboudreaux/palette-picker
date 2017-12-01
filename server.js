@@ -7,7 +7,7 @@ const app = express();
 const environment = process.env.NODE_ENV || 'development';
 //configs knex environment
 const configuration = require('./knexfile')[environment];
-//
+//knex is bridging  to  db
 const database = require('knex')(configuration);
 
 //sets port either the dynamic port or the localhost if no dev port is found
@@ -18,12 +18,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/node_modules'));
-
-app.locals.title = 'Palette Picker';
-
-app.get('/', (request, response) => {
-  response.sendFile(__dirname + '/public/index.html');
-});
 
 app.get('/api/v1/projects', (request, response) => {
   database('projects').select()
@@ -148,8 +142,7 @@ app.post('/api/v1/projects/:id/palettes', (request, response) => {
   console.log(palette);
   const { id } = request.params;
 
-  for ( let requiredParameter of ['name', 'color1', 'color2', 'color3',
-    'color4', 'color5']) {
+  for ( let requiredParameter of ['name', 'color1', 'color2', 'color3', 'color4', 'color5']) {
     if (!palette[requiredParameter]) {
       return response.status(422).json({
         error: `You are missing the ${requiredParameter} property`
@@ -170,7 +163,7 @@ app.post('/api/v1/projects/:id/palettes', (request, response) => {
 
 app.delete('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
-console.log('r u there');
+  
   database('palettes').where('id', id).del()
   .then(length => {
     console.log(length);
@@ -181,16 +174,6 @@ console.log('r u there');
       response.status(500).json({ error });
     });
 });
-
-// app.delete('/api/v1/palettes/:id', (request, response) => {
-//   const { id } = request.params;
-//
-//   database('palettes').where('id', id).delete()
-//     .then(response => response.status(204).json({ id }))
-//     .catch(error => {
-//       return response.status(500).json({ error });
-//     });
-// });
 
 app.delete('/api/v1/projects/:id', (request, response) => {
   const { id } = request.params;
@@ -205,3 +188,5 @@ app.delete('/api/v1/projects/:id', (request, response) => {
 app.listen(app.get('port'), () => {
   console.log(`App is running on ${app.get('port')}.`);
 });
+
+module.exports = app;

@@ -55,8 +55,8 @@ header  {
 }
 
 .palette-color-container {
-  justify-content: center;
   display: flex;
+  justify-content: center;
   width: 70%;
   transition: background 1s ease;
 }
@@ -77,11 +77,10 @@ header  {
   border-radius: 5px;
   font-size: .8em;
   font-weight: 400;
-  height: 23px;
-  width: 85%;
+  /*height: 23px;*/
   margin-bottom: 4px;
   opacity: .7;
-  padding-top: 3px;
+  padding: 3px 5px 0 5px;
   text-align: center;
 }
 

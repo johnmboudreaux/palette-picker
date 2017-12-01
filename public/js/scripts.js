@@ -10,25 +10,25 @@ $(function() {
     loadProjects();
   });
 
-  const generateRandomHex = () => {
+  function generateRandomHex() {
     const value = Math.floor(Math.random() * 255).toString(16);
 
     return value.length === 1
       ? '0' + value
       : value;
-  };
+  }
 
-  const generateColor = () => {
+  function generateColor() {
     const red = generateRandomHex();
     const green = generateRandomHex();
     const blue = generateRandomHex();
     return `#${red}${green}${blue}`;
-  };
+  }
 
-  const setColor = (color, position) => {
+  function setColor(color, position) {
     $('.palette-' + position).find('h3').text(color);
     $('.palette-' + position).css('background', color);
-  };
+  }
 
   function setAllColors() {
     for (var i = 1; i < 6; i++) {
@@ -36,11 +36,15 @@ $(function() {
     }
   }
 
-  // fetch calls
-  const loadProjects = async() => {
+  function lockColor() {
+    
+  }
+
+  // async functions
+  async function loadProjects() {
     const allProjects = await getProjects();
     console.log(allProjects);
-  };
+  }
 
   function setProject() {
     let projectName = $('#save-project-input').val();
@@ -84,12 +88,11 @@ $(function() {
       },
       method: 'POST',
       body: JSON.stringify(postBody)
-    }).then(populateDropDown())
+    }).then(populateDropDown());
   }
 
   function appendPalette(palettes) {
-    const projectSelector = $('#project-selector').val();
-    $('#projects').html('')
+    $('#projects').html('');
     palettes.forEach((palette) => {
       return fetch(`/api/v1/projects/${palette.id}/palettes`).then(response => response.json()).then(parsedResponse => {
         $('#projects').append(`
@@ -117,7 +120,7 @@ $(function() {
     let paletteId = $(event.target).attr('data-palette-id');
     fetch(`/api/v1/palettes/${paletteId}`, {method: 'DELETE'}).then(response => {
       populateDropDown();
-    }).catch(error => console.log(error))
+    }).catch(error => console.log(error));
   }
 
   function getProjects() {
