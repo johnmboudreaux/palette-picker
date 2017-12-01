@@ -3,8 +3,9 @@ $(function() {
   $('#generate-button').click(setAllColors);
   $('#save-project-button').click(setProject);
   $('#save-palette-button').click(createPalette);
+  $('body').on('click', '#swatch-delete-button', deletePalette)
 
-  $( window ).on( "load", function() {
+  $(window).on("load", function() {
     setAllColors();
     loadProjects();
   });
@@ -12,7 +13,9 @@ $(function() {
   const generateRandomHex = () => {
     const value = Math.floor(Math.random() * 255).toString(16);
 
-    return value.length === 1 ? '0' + value : value;
+    return value.length === 1
+      ? '0' + value
+      : value;
   };
 
   const generateColor = () => {
@@ -34,14 +37,16 @@ $(function() {
   }
 
   // fetch calls
-  const loadProjects = async () => {
+  const loadProjects = async() => {
     const allProjects = await getProjects();
     console.log(allProjects);
   };
 
   function setProject() {
     let projectName = $('#save-project-input').val();
-    let postBody = { 'title': projectName };
+    let postBody = {
+      'title': projectName
+    };
 
     fetch('/api/v1/projects', {
       headers: {
@@ -50,11 +55,9 @@ $(function() {
       },
       method: 'POST',
       body: JSON.stringify(postBody)
-    })
-      .then(response => response.json())
-      .then(parsedResponse => {
-        $('#save-projects').html(parsedResponse.name);
-      });
+    }).then(response => response.json()).then(parsedResponse => {
+      $('#save-projects').html(parsedResponse.name);
+    });
   }
 
   function createPalette() {
@@ -74,33 +77,63 @@ $(function() {
       color5: color5,
       projectId: projectId
     };
-    return fetch(`/api/v1/projects/${projectId}/palettes`, {
+    fetch(`/api/v1/projects/${projectId}/palettes`, {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json'
       },
       method: 'POST',
       body: JSON.stringify(postBody)
+    }).then(populateDropDown())
+  }
+
+  function appendPalette(palettes) {
+    const projectSelector = $('#project-selector').val();
+    $('#projects').html('')
+    palettes.forEach((palette) => {
+      return fetch(`/api/v1/projects/${palette.id}/palettes`).then(response => response.json()).then(parsedResponse => {
+        $('#projects').append(`
+            <h5>${palette.title}</h5>
+            <div class="color-palette" id="project-palette${palette.id}">
+            </div>`);
+        if (parsedResponse) {
+          parsedResponse.forEach((item) => {
+            $('#project-palette' + palette.id).append(`<div>
+              <h5>${item.name}</h5>
+                <div class="color-swatch left-border" style="background: ${item.color1}"></div>
+                <div class="color-swatch" style="background: ${item.color2}"></div>
+                <div class="color-swatch" style="background: ${item.color3}"></div>
+                <div class="color-swatch" style="background: ${item.color4}"></div>
+                <div class="color-swatch right-border" style="background: ${item.color5}"></div>
+                <button class="delete-button" id="swatch-delete-button" data-palette-id="${item.id}">X</button>
+              </div>`);
+          });
+        }
+      });
     });
   }
 
-  function getProjects() {
-    return fetch('/api/v1/projects')
-      .then(response => response.json())
-      .then(parsedResponse => {
-        return parsedResponse;
-      })
-      .catch(error => console.log(error));
+  function deletePalette(event) {
+    let paletteId = $(event.target).attr('data-palette-id');
+    fetch(`/api/v1/palettes/${paletteId}`, {method: 'DELETE'}).then(response => {
+      populateDropDown();
+    }).catch(error => console.log(error))
   }
 
-  const populateDropDown = async () => {
-    const optionList = document.getElementById('project-selector').options;
+  function getProjects() {
+    return fetch('/api/v1/projects').then(response => response.json()).then(parsedResponse => {
+      return parsedResponse;
+    }).catch(error => console.log(error));
+  }
+
+  async function populateDropDown() {
+    const optionList = $('#project-selector');
     const options = await getProjects();
-    console.log(options);
-    options.forEach( option => optionList.add(new Option(option.title, option.id)));
-  };
+    appendPalette(options);
+    optionList.html('');
+    options.forEach(option => optionList.append(`<option value="${option.id}">${option.title}</option>`))
+  }
 
   populateDropDown();
-
 
 });

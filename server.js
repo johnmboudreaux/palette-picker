@@ -114,9 +114,7 @@ app.get('/api/v1/projects/:id/palettes', (request, response) => {
       if (palettes.length) {
         return response.status(201).json(palettes);
       } else {
-        return response.status(404).json({
-          error: `Could not locate palettes with id ${id} property`
-        });
+        return response.status(200).json([]);
       }
     })
     .catch(error => {
@@ -172,13 +170,27 @@ app.post('/api/v1/projects/:id/palettes', (request, response) => {
 
 app.delete('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
-
-  database('palettes').where('id', id).delete()
-    .then(response => response.status(204).json({ id }))
+console.log('r u there');
+  database('palettes').where('id', id).del()
+  .then(length => {
+    console.log(length);
+    length ? response.sendStatus(204) : response.status(422)
+      .send({ error: 'nothing to delete with that id' });
+    })
     .catch(error => {
-      return response.status(500).json({ error });
+      response.status(500).json({ error });
     });
 });
+
+// app.delete('/api/v1/palettes/:id', (request, response) => {
+//   const { id } = request.params;
+//
+//   database('palettes').where('id', id).delete()
+//     .then(response => response.status(204).json({ id }))
+//     .catch(error => {
+//       return response.status(500).json({ error });
+//     });
+// });
 
 app.delete('/api/v1/projects/:id', (request, response) => {
   const { id } = request.params;
