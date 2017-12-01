@@ -3,8 +3,8 @@ $(function() {
   $('#generate-button').click(setAllColors);
   $('#save-project-button').click(checkProjectName);
   $('#save-palette-button').click(createPalette);
-  $('body').on('click', '#swatch-delete-button', deletePalette)
-  $('.palette-container').on('click', '.lock', (event) => toggleLock(event.target))
+  $('body').on('click', '#swatch-delete-button', deletePalette);
+  $('.palette-container').on('click', '.lock', (event) => toggleLock(event.target));
   $('.right-side').on('click', '.colors', event => selectToDisplayMainPalette(event.target));
 
   $(window).on("load", function() {
@@ -43,12 +43,12 @@ $(function() {
 
   function toggleLock(target) {
     const lock = $(target);
-    
+
     if (lock.attr('src') === '../assets/padlock-open.png') {
       lock.attr('src', './assets/padlock-closed.png');
       lock.closest('.palette-color-container').addClass('locked');
     } else {
-      lock.attr('src', './assets/padlock-open.png');
+      lock.attr('src', '../assets/padlock-open.png');
       lock.closest('.palette-color-container').removeClass('locked');
     }
   }
@@ -181,7 +181,7 @@ $(function() {
     const options = await getProjects();
     appendPalette(options);
     optionList.html('');
-    options.forEach(option => optionList.append(`<option value="${option.id}">${option.title}</option>`))
+    options.forEach(option => optionList.append(`<option value="${option.id}">${option.title}</option>`));
   }
 
   populateDropDown();
