@@ -43,8 +43,9 @@ $(function() {
 
   function toggleLock(target) {
     const lock = $(target);
-
-    if (lock.attr('src') === './assets/padlock-open.png') {
+    console.log(lock);
+    if (lock.attr('src') === '../assets/padlock-open.png') {
+      console.log('clicked');
       lock.attr('src', './assets/padlock-closed.png');
       lock.closest('.palette-color-container').addClass('locked');
     } else {
@@ -102,6 +103,10 @@ $(function() {
           alert('Duplicate project names not allowed.');
         }
       });
+  }
+
+  function deleteProject () {
+
   }
 
   function createPalette() {
