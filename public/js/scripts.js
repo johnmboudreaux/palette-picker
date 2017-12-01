@@ -5,6 +5,7 @@ $(function() {
   $('#save-palette-button').click(createPalette);
   $('body').on('click', '#swatch-delete-button', deletePalette)
   $('.palette-container').on('click', '.lock', (event) => toggleLock(event.target))
+  $('.right-side').on('click', '.colors', event => selectToDisplayMainPalette(event.target));
 
   $(window).on("load", function() {
     setAllColors();
@@ -28,6 +29,7 @@ $(function() {
   function setColor(color, position) {
     $('.palette-' + position).find('h3').text(color);
     $('.palette-' + position).css('background', color);
+
   }
 
   function setAllColors() {
@@ -48,6 +50,17 @@ $(function() {
     } else {
       lock.attr('src', './assets/padlock-open.png');
       lock.closest('.palette-color-container').removeClass('locked');
+    }
+  }
+
+  function selectToDisplayMainPalette(eventTarget) {
+    const palette = eventTarget.closest('.colors');
+
+    for (let i = 1; i < 6; i++) {
+      const smallColor = $(palette).find(`.select-main-palette${i}`).css('background-color');
+      console.log(smallColor);
+      setColor(smallColor, i)
+      // $(`.palette-${i}`).css('background-color', smallColor);
     }
   }
 
@@ -83,8 +96,9 @@ $(function() {
         const match = projects.find(project => projectTitle === project.title);
         if (!match) {
           setProject(projectTitle);
+        } else {
+          alert('Duplicate project names not allowed.');
         }
-        alert('Duplicate project names not allowed.');
       });
   }
 
@@ -129,11 +143,11 @@ $(function() {
               `<div class="dynamic-swatch-container">
                 <h5 class="swatch-title">${item.name}</h5>
                 <div class="colors">
-                  <div class="color-swatch left-border" style="background: ${item.color1}"></div>
-                  <div class="color-swatch" style="background: ${item.color2}"></div>
-                  <div class="color-swatch" style="background: ${item.color3}"></div>
-                  <div class="color-swatch" style="background: ${item.color4}"></div>
-                  <div class="color-swatch right-border" style="background: ${item.color5}"></div>
+                  <div class="color-swatch select-main-palette1 left-border" style="background: ${item.color1}"></div>
+                  <div class="color-swatch select-main-palette2" style="background: ${item.color2}"></div>
+                  <div class="color-swatch select-main-palette3" style="background: ${item.color3}"></div>
+                  <div class="color-swatch select-main-palette4" style="background: ${item.color4}"></div>
+                  <div class="color-swatch select-main-palette5 right-border" style="background: ${item.color5}"></div>
                   <button class="delete-button" id="swatch-delete-button" data-palette-id="${item.id}">X</button>
                 </div>
               </div>`);
