@@ -4,6 +4,7 @@ $(function() {
   $('#save-project-button').click(setProject);
   $('#save-palette-button').click(createPalette);
   $('body').on('click', '#swatch-delete-button', deletePalette)
+  $('.palette-container').on('click', '.lock', (event) => toggleLock(event.target))
 
   $(window).on("load", function() {
     setAllColors();
@@ -12,7 +13,6 @@ $(function() {
 
   function generateRandomHex() {
     const value = Math.floor(Math.random() * 255).toString(16);
-
     return value.length === 1
       ? '0' + value
       : value;
@@ -32,12 +32,23 @@ $(function() {
 
   function setAllColors() {
     for (var i = 1; i < 6; i++) {
-      setColor(generateColor(), i);
+      const color = generateColor();
+      if (!$(`.palette-${i}`).hasClass('locked')) {
+        setColor(color, i);
+      }
     }
   }
 
-  function lockColor() {
-    
+  function toggleLock(target) {
+    const lock = $(target);
+
+    if (lock.attr('src') === './assets/padlock-open.png') {
+      lock.attr('src', './assets/padlock-closed.png');
+      lock.closest('.palette-color-container').addClass('locked');
+    } else {
+      lock.attr('src', './assets/padlock-open.png');
+      lock.closest('.palette-color-container').removeClass('locked');
+    }
   }
 
   // async functions

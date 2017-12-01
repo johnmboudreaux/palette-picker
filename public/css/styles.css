@@ -65,7 +65,7 @@ header  {
   opacity: .95;
 }
 
-.unlocked {
+.lock {
   align-self: flex-end;
   height: 3em;
   width: 3em;
