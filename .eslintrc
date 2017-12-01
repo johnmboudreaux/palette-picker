@@ -26,7 +26,9 @@
     "comma-spacing": ["error", { "before": false, "after": true }],
     "comma-style": ["error", "last"],
     "computed-property-spacing": ["error", "never"],
+    "no-console": 0,
     "func-call-spacing": ["error", "never"],
+    "no-undef": 0,
     "keyword-spacing": ["error", { "before": true, "after": true }],
     "no-duplicate-imports": "error",
     "max-depth": ["warn", 4]
