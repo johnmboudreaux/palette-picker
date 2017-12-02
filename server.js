@@ -161,7 +161,6 @@ app.delete('/api/v1/palettes/:id', (request, response) => {
 
   database('palettes').where('id', id).del()
   .then(length => {
-    console.log(length);
     length ? response.sendStatus(204) : response.status(422)
       .send({ error: 'nothing to delete with that id' });
     })
@@ -172,11 +171,16 @@ app.delete('/api/v1/palettes/:id', (request, response) => {
 
 app.delete('/api/v1/projects/:id', (request, response) => {
   const { id } = request.params;
+  console.log('id: ', id);
 
-  database('projects').where('id', id).delete()
-    .then(response => response.status(204).json({ id }))
+  database('projects').where('id', id).del()
+    .then(length => {
+      length ? response.sendStatus(204) : response.status(422)
+      .send({ error: 'nothing to delete with that id' })
+    })
     .catch(error => {
-      response.status(500).json({error});
+      console.log(error);
+      response.status(500).json({ error });
     });
 });
 

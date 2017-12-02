@@ -60,26 +60,31 @@
     </div>
   </main>
 
-  <aside>
+  <section class="bottom-section">
 
     <section class="left-side">
 
-      <div class="project-title">
-        <h1 class="create-project-title">Create Projects</h1>
+      <div class="create-project-title">
+        <h1>Create Projects</h1>
       </div>
-      <div class="project-controls">
-        <input class="project-input" id="save-project-input" type="text" placeholder="Save Project">
+      <div class="save-project-controls">
+        <input class="project-input" id="save-project-input" type="text" placeholder="Create And Save Project To Add Palettes">
         <button class="create-project-button" id="save-project-button">Save Project</button>
       </div>
+
+      <section class="created-projects">
+        <h1>My Projects</h1>
+        <div class="swatch-container" id="projects"></div>
+      </section>
 
       <div class="add-project-title">
         <h1>Add Palette To Project</h1>
       </div>
-      <div class="drop-select">
+      <div class="add-palette-drop-select">
         <select name="drop-down" id="project-selector">
           <option>Project Name Here</option>
         </select>
-          <input class="palette-input" id="save-palette-input" type="text" placeholder="Save Palette">
+          <input class="palette-input" id="save-palette-input" type="text" placeholder="Choose A Project And Save A Palette">
           <button class="create-palette-button" id="save-palette-button">Save Palette</button>
       </div>
 
@@ -90,19 +95,17 @@
         <select name="delete-project-drop-down" id="delete-project-selector">
           <option></option>
         </select>
-        <div class="">
-          <button class="delete-project-button" id="delete-project-button">Delete Project</button>
-        </div>
+          <button class="delete-project-button" id="destroy-project-button">Delete Project</button>
       </div>
 
     </section>
 
-    <section class="right-side">
+    <!-- <section class="right-side">
       <h1>Saved Projects</h1>
       <div class="swatch-container" id="projects"></div>
-    </section>
+    </section> -->
 
-  </aside>
+  </section>
 
 <script src="js/scripts.js"></script>
 </body>
