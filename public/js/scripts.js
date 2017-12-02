@@ -165,7 +165,7 @@ $(function() {
   }
 
   async function deleteProject() {
-    const projectId = $('[name="delete-project-drop-down"]').val();
+    const projectId = $('#delete-project-selector').val();
     fetch(`/api/v1/projects/${projectId}`, {method: 'DELETE'}).then(response => {
       populateDropDown(response);
     }).catch(error => console.log(error));
