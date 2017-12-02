@@ -7,11 +7,8 @@ $(function() {
   $('.palette-container').on('click', '.lock', (event) => toggleLock(event.target));
   $('.right-side').on('click', '.colors', event => selectToDisplayMainPalette(event.target));
 
-  $(window).on("load", function() {
-    setAllColors();
-    loadProjects();
-    setAllColors();
-  });
+  setAllColors();
+  loadProjects();
 
   function generateRandomHex() {
     const value = Math.floor(Math.random() * 255).toString(16);
@@ -30,7 +27,6 @@ $(function() {
   function setColor(color, position) {
     $('.palette-' + position).find('h3').text(color);
     $('.palette-' + position).css('background', color);
-
   }
 
   function setAllColors() {
@@ -79,19 +75,14 @@ $(function() {
       },
       method: 'POST',
       body: JSON.stringify(postBody)
-    }).then(response => response.json()).then(parsedResponse => {
-      $('#save-projects').html(parsedResponse[0].title);
-      $('#project-selector').append($('<option>', {
-        value: parsedResponse[0].id,
-        text: parsedResponse[0].title,
-        selected: true
-      }));
+    }).then(response => response.json()).then(() => {
+      populateDropDown();
     });
   }
 
   function checkProjectName() {
     const projectTitle = $('#save-project-input').val();
-
+    $('#save-project-input').val('');
     fetch(`/api/v1/projects/`)
       .then(response => response.json())
       .then(projects => {
@@ -107,6 +98,7 @@ $(function() {
   function createPalette() {
     const projectId = $("#project-selector").val();
     const paletteName = $('#save-palette-input').val();
+    $('#save-palette-input').val('');
     const color1 = $('#color1').text();
     const color2 = $('#color2').text();
     const color3 = $('#color3').text();

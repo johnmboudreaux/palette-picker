@@ -121,7 +121,7 @@ header  {
 .create-palette-button {
   background-color: #53E883;
   box-shadow: 0 0 10px #2986E5;
-  height: 30px;
+  height: 25px;
   width: 85px;
   padding-top: 5px;
 }
@@ -129,7 +129,7 @@ header  {
 .delete-project-button {
     background-color: #53E883;
     box-shadow: 0 0 10px #2986E5;
-    height: 30px;
+    height: 25px;
     width: 85px;
     /*padding-top: 5px;*/
 }
