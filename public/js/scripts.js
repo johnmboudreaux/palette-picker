@@ -1,7 +1,7 @@
 $(function() {
-
   $('#generate-button').click(setAllColors);
   $('#save-project-button').click(checkProjectName);
+  $('#destroy-project-button').click(deleteProject);
   $('#save-palette-button').click(createPalette);
   $('body').on('click', '#swatch-delete-button', deletePalette);
   $('.palette-container').on('click', '.lock', (event) => toggleLock(event.target));
@@ -10,6 +10,7 @@ $(function() {
   $(window).on("load", function() {
     setAllColors();
     loadProjects();
+    setAllColors();
   });
 
   function generateRandomHex() {
@@ -62,7 +63,6 @@ $(function() {
     }
   }
 
-  // async functions
   async function loadProjects() {
     const allProjects = await getProjects();
   }
@@ -104,10 +104,6 @@ $(function() {
       });
   }
 
-  function deleteProject () {
-    const project = $('.swatch-title').text()
-  }
-
   function createPalette() {
     const projectId = $("#project-selector").val();
     const paletteName = $('#save-palette-input').val();
@@ -140,7 +136,7 @@ $(function() {
     palettes.forEach((palette) => {
       return fetch(`/api/v1/projects/${palette.id}/palettes`).then(response => response.json()).then(parsedResponse => {
         $('#projects').append(`
-            <h5>${palette.title}</h5>
+            <h5 id="palette-${palette.id}">${palette.title}</h5>
             <div class="color-palette" id="project-palette${palette.id}">
             </div>`);
         if (parsedResponse) {
@@ -166,7 +162,7 @@ $(function() {
   function deletePalette(event) {
     let paletteId = $(event.target).attr('data-palette-id');
     fetch(`/api/v1/palettes/${paletteId}`, {method: 'DELETE'}).then(response => {
-      populateDropDown();
+      populateDropDown(response);
     }).catch(error => console.log(error));
   }
 
@@ -176,14 +172,27 @@ $(function() {
     }).catch(error => console.log(error));
   }
 
+  async function deleteProject() {
+    const projectId = $('[name="delete-project-drop-down"]').val();
+    fetch(`/api/v1/projects/${projectId}`, {method: 'DELETE'}).then(response => {
+      populateDropDown(response);
+    }).catch(error => console.log(error));
+  }
+
   async function populateDropDown() {
     const optionList = $('#project-selector');
+    const deleteOptionList = $('#delete-project-selector');
     const options = await getProjects();
     appendPalette(options);
     optionList.html('');
-    options.forEach(option => optionList.append(`<option value="${option.id}">${option.title}</option>`));
+    deleteOptionList.html('');
+    optionList.append(`<option value="" selected>Project Name</option>`);
+    deleteOptionList.append(`<option value="" selected>Project Name</option>`);
+    options.forEach(option => {
+      optionList.append(`<option value="${option.id}">${option.title}</option>`);
+      deleteOptionList.append(`<option value="${option.id}">${option.title}</option>`);
+    });
   }
 
   populateDropDown();
-
 });

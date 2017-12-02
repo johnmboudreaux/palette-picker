@@ -83,8 +83,7 @@ header  {
   text-align: center;
 }
 
-.project-controls {
-  display: flex;
+.save-project-controls {
   margin-left: 10px;
   width: 50vw;
 }
@@ -115,7 +114,7 @@ header  {
   border-radius: 4px;
   height: 30px;
   width: 65%;
-  margin: 0 -5px 30px 0;
+  margin: 0 -5px 20px 0;
 }
 
 .create-project-button,
@@ -127,17 +126,32 @@ header  {
   padding-top: 5px;
 }
 
+.delete-project-button {
+    background-color: #53E883;
+    box-shadow: 0 0 10px #2986E5;
+    height: 30px;
+    width: 85px;
+    /*padding-top: 5px;*/
+}
+
 .create-project-button:hover,
-.create-palette-button:hover {
+.create-palette-button:hover,
+.delete-project-button:hover {
   background-color: #FFEF6E;
 }
 
-.left-side {
-  width: 50vw;
+.bottom-section {
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.right-side {
-  width: 50vw;
+.left-side {
+  /*width: 50vw;*/
+}
+
+.created-projects {
+  margin-left: 10px;
+  /*width: 50vw;*/
 }
 
 .palette-template h1 {
@@ -147,13 +161,11 @@ header  {
 }
 
 .swatch-container {
-  flex-direction: row;
-  width: 50%;
+  /*width: 50%;*/
 }
 
 .dynamic-swatch-container {
-  display: flex;
-  flex-direction: column;
+  /*width: 49vw;*/
 }
 
 .color-swatch {
@@ -173,8 +185,8 @@ header  {
 .delete-button {
   height: 3em;
   width: 20%;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px; }
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px; }
 }
 
 .create-project-title {
@@ -182,34 +194,25 @@ header  {
   text-align: center;
 }
 
-.project-title,
+.create-project-title,
 .add-project-title,
 .delete-project-title {
   margin: 10px;
 }
 
-.drop-select {
-  display: flex;
-  flex-direction: column;
+.add-palette-drop-select,
+.delete-drop-select {
   margin-left: 10px
 }
 
 .left-border {
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
 }
 
 #project-selector,
 #delete-project-selector {
   margin-bottom: 5px;
+  height: 30px;
   width: 65%;
-}
-
-.delete-project-dropdown {
-
-}
-
-aside {
-  display: flex;
-  flex-wrap: wrap;
 }
