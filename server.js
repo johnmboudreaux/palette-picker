@@ -134,11 +134,11 @@ app.post('/api/v1/projects', (request, response) => {
 
 app.post('/api/v1/projects/:id/palettes', (request, response) => {
   let palette = request.body;
-  console.log(palette);
   const { id } = request.params;
 
   for ( let requiredParameter of ['name', 'color1', 'color2', 'color3', 'color4', 'color5']) {
     if (!palette[requiredParameter]) {
+      console.log(response);
       return response.status(422).json({
         error: `You are missing the ${requiredParameter} property`
       });

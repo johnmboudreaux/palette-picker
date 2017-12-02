@@ -105,7 +105,7 @@ $(function() {
   }
 
   function deleteProject () {
-
+    const project = $('.swatch-title').text()
   }
 
   function createPalette() {

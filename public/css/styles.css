@@ -85,11 +85,8 @@ header  {
 
 .project-controls {
   display: flex;
+  margin-left: 10px;
   width: 50vw;
-}
-
-.controls {
-
 }
 
 .generate-button-container {
@@ -119,10 +116,6 @@ header  {
   height: 30px;
   width: 65%;
   margin: 0 -5px 30px 0;
-}
-
-.project-controls {
-  margin-left: 10px;
 }
 
 .create-project-button,
@@ -189,7 +182,9 @@ header  {
   text-align: center;
 }
 
-.project-title {
+.project-title,
+.add-project-title,
+.delete-project-title {
   margin: 10px;
 }
 
@@ -204,8 +199,14 @@ header  {
   border-bottom-left-radius: 5px;
 }
 
-#project-selector {
+#project-selector,
+#delete-project-selector {
+  margin-bottom: 5px;
   width: 65%;
+}
+
+.delete-project-dropdown {
+
 }
 
 aside {
