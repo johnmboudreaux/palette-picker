@@ -196,4 +196,86 @@ describe('API Routes', () => {
     });
   });
 
+  describe('POST /api/v1/projects/:id/palettes/', () => {
+    it('should send a new palette to database', (done) => {
+      chai.request(server)
+        .post('/api/v1/projects/1/palettes')
+        .send({
+          id: 3,
+          name: 'name goes here',
+          color1: '#00cc00',
+          color2: '#6E1D15',
+          color3: '#403E7B',
+          color4: '#AA8CDA',
+          color5: '#38b6f1',
+          projectId: 1
+        })
+        .then((response) => {
+          response.should.have.status(201);
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].id.should.equal(3);
+          response.body[0].should.have.property('name');
+          response.body[0].name.should.equal('name goes here');
+
+          chai.request(server)
+            .get('/api/v1/projects/1/palettes')
+            .then((getResponse) => {
+              getResponse.should.have.status(201);
+              getResponse.should.be.json;
+              getResponse.body.should.be.a('array');
+              getResponse.body.length.should.equal(3);
+              getResponse.body[2].should.have.property('id');
+              getResponse.body[2].id.should.equal(3);
+              getResponse.body[2].should.have.property('name');
+              getResponse.body[2].name.should.equal('name goes here');
+              getResponse.body[2].should.have.property('color1');
+              getResponse.body[2].color1.should.equal('#00cc00');
+              getResponse.body[2].should.have.property('color2');
+              getResponse.body[2].color2.should.equal('#6E1D15');
+              getResponse.body[2].should.have.property('color3');
+              getResponse.body[2].color3.should.equal('#403E7B');
+              getResponse.body[2].should.have.property('color4');
+              getResponse.body[2].color4.should.equal('#AA8CDA');
+              getResponse.body[2].should.have.property('color5');
+              getResponse.body[2].color5.should.equal('#38b6f1');
+              getResponse.body[2].should.have.property('projectId');
+              getResponse.body[2].projectId.should.equal(1);
+              getResponse.body[2].should.have.property('created_at');
+              getResponse.body[2].should.have.property('updated_at');
+              done();
+            })
+            .catch((error) => {
+              throw error;
+            });
+        });
+    });
+  });
+
+  describe('DELETE /api/v1/palettes/:id/', () => {
+    it('remove a palette from the database', (done) => {
+      chai.request(server)
+        .delete('/api/v1/palettes/1')
+        .then((response) => {
+          response.should.have.status(204);
+          done();
+        })
+        .catch((error) => {
+          throw error;
+        });
+    });
+
+    it('remove a return a 422 if there is not palette to remove', (done) => {
+      chai.request(server)
+        .delete('/api/v1/palettes/4')
+        .then((response) => {
+          response.should.have.status(422);
+          done();
+        })
+        .catch((error) => {
+          throw error;
+        });
+    });
+  });
 });

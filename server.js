@@ -21,7 +21,7 @@ app.get('/api/v1/projects', (request, response) => {
       return response.status(200).json(projects);
     })
     .catch( error => {
-      response.status(500).json({ error });
+      return response.status(500).json({ error });
     });
 });
 
@@ -138,7 +138,6 @@ app.post('/api/v1/projects/:id/palettes', (request, response) => {
 
   for ( let requiredParameter of ['name', 'color1', 'color2', 'color3', 'color4', 'color5']) {
     if (!palette[requiredParameter]) {
-      console.log(response);
       return response.status(422).json({
         error: `You are missing the ${requiredParameter} property`
       });
@@ -148,8 +147,8 @@ app.post('/api/v1/projects/:id/palettes', (request, response) => {
   palette = Object.assign({}, palette, { projectId: id });
 
   database('palettes').insert(palette, '*')
-    .then(paletteId => {
-      return response.status(201).json({ id: paletteId[0]});
+    .then(insertedPalette => {
+      return response.status(201).json(insertedPalette);
     })
     .catch(error => {
       return response.status(500).json({error});
