@@ -170,7 +170,6 @@ app.delete('/api/v1/palettes/:id', (request, response) => {
 
 app.delete('/api/v1/projects/:id', (request, response) => {
   const { id } = request.params;
-  console.log('id: ', id);
 
   database('projects').where('id', id).del()
     .then(length => {
