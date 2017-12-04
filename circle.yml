@@ -9,4 +9,4 @@ machine:
 test:
   override:
     - npm run test
-    - npm ruun lint
+    - npm run lint
