@@ -7,6 +7,7 @@ $(function() {
   $('body').on('click', '#swatch-delete-button', deletePalette);
   $('.palette-container').on('click', '.lock', (event) => toggleLock(event.target));
   $('.right-side').on('click', '.colors', event => selectToDisplayMainPalette(event.target));
+
   setAllColors();
   loadProjects();
 
