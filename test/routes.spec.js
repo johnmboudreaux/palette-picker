@@ -1,3 +1,4 @@
+/*eslint-disable */
 const chai = require('chai');
 const should = chai.should();
 const chaiHttp = require('chai-http');
@@ -15,6 +16,7 @@ describe('Client Routes', () => {
     return chai.request(server)
       .get('/')
       .then(response => {
+        console.log(response);
         response.should.have.status(200);
         response.should.be.html;
         response.res.text.includes('Palette Picker');
