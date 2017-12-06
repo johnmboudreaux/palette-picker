@@ -8,14 +8,26 @@ $(function() {
   $('.palette-container').on('click', '.lock', (event) => toggleLock(event.target));
   $('.right-side').on('click', '.colors', event => selectToDisplayMainPalette(event.target));
 
+
+  //feature detection
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js')
+      .then(registration => {
+        console.log('ServiceWorker registration successful');
+      })
+      .catch(error => {
+        console.log(`ServiceWorker reg failed: ${error}`);
+      });
+    });//end event listener
+  }
+
   setAllColors();
   loadProjects();
 
   function generateRandomHex() {
     const value = Math.floor(Math.random() * 255).toString(16);
-    return value.length === 1
-      ? '0' + value
-      : value;
+    return value.length === 1 ? '0' + value : value;
   }
 
   function generateColor() {
