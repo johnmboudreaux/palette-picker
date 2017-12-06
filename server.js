@@ -9,7 +9,7 @@ const database = require('knex')(configuration);
 
 const requireHTTPS = (request, response, next) => {
   if (request.header('x-forwarded-proto') != 'https') {
-    return response.redirect(`https://${request.header('host')}${request.irl}`);
+    return response.redirect(`https://${request.header('host')}${request.url}`);
   }
   next();
 };
