@@ -6,23 +6,23 @@
   "display": "fullscreen",
   "icons": [
     {
-      "src": "img/icon-48.png",
-      "type": "./assets/48x48bear.jpeg",
+      "src": "./assets/48x48bear.jpeg",
+      "type": "image/jpeg",
       "sizes": "48x48"
     },
     {
-      "src": "img/icon-96.png",
-      "type": "../public/assets/96x96bear.jpeg",
+      "src": "./assets/48x48bear.jpeg",
+      "type": "image/jpeg",
       "sizes": "96x96"
     },
     {
-      "src": "img/icon-192.png",
-      "type": "../public/assets/192x192bear.jpeg",
+      "src": "./assets/48x48bear.jpeg",
+      "type": "image/jpeg",
       "sizes": "192x192"
     },
     {
-      "src": "img/icon-512.png",
-      "type": "../public/assets/512x512bear.jpeg",
+      "src": "./assets/48x48bear.jpeg",
+      "type": "image/jpeg",
       "sizes": "512x512"
     }
   ],
