@@ -81,6 +81,7 @@ $(function() {
 
   function checkProjectName() {
     const projectTitle = $('#save-project-input').val();
+    offLineProjects(projectTitle);
     $('#save-project-input').val('');
     fetch(`/api/v1/projects/`)
       .then(response => response.json())
@@ -97,6 +98,7 @@ $(function() {
   function createPalette() {
     const projectId = $("#project-selector").val();
     const paletteName = $('#save-palette-input').val();
+    offLinePalettes(paletteName);
     $('#save-palette-input').val('');
     const color1 = $('#color1').text();
     const color2 = $('#color2').text();
@@ -190,6 +192,17 @@ $(function() {
 
 });
 
+
+
+import {
+  saveOfflineMarkdown,
+  loadOfflineMarkdowns,
+  getSingleMarkdown
+}  from './indexedDB';
+
+
+
+
 //feature detection
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -201,4 +214,62 @@ if ('serviceWorker' in navigator) {
       console.log(`ServiceWorker reg failed: ${error}`);
     });
   });//end event listener
+}
+
+const sendMessageToSync = markdown => {
+  navigator.serviceWorker.controller.postMessage({
+    type: 'add-markdown',
+    markdown: markdown
+  })
+}
+
+function offLineProjects() {
+saveOfflineProject({ id, title })
+  .then(md => {
+    sendMessageToSync({ id, content, title, status: 'pendingSync' })
+    $('#offline-markdowns').val(`md-${id}`);
+  })
+  .catch(error => console.log(`Error saving markdown: ${error}`));
+}
+
+function offLinePalettes() {
+  saveOfflinePalette({ id, content, title, status: 'pendingSync' })
+    .then(md => {
+      sendMessageToSync({ id, content, title, status: 'pendingSync' })
+      $('#offline-markdowns').val(`md-${id}`);
+    })
+    .catch(error => console.log(`Error saving markdown: ${error}`));
+}
+
+const setSelectedMarkdown = (id) => {
+  getSingleMarkdown(id).then(md => {
+    $('#live-markdown').val(md.content);
+    $('#live-markdown').keyup();
+  }).catch(error => console.log({error}))
+}
+
+$('#offline-markdowns').on('change', function(event) {
+  let markdownId = $(this).val().split('-')[1];
+  setSelectedMarkdown(markdownId);
+});
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+
+    // Load markdowns from indexedDB
+    loadOfflineMarkdowns()
+      .then(markdowns => appendMarkdowns(markdowns))
+      .catch(error => console.log(`Error loading markdowns: ${error}`));
+
+    // Register a new service worker
+    navigator.serviceWorker.register('./service-worker.js')
+    .then(registration => navigator.serviceWorker.ready)
+      .then(registration => {
+        Notification.requestPermission();
+        console.log('ServiceWorker registration successful');
+      }).catch(err => {
+        console.log(`ServiceWorker registration failed: ${err}`);
+      });
+
+  });
 }
