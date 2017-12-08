@@ -99,6 +99,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__indexedDB__ = __webpack_require__(2);
 /*eslint-disable */
 
+
+
 $('#generate-button').click(setAllColors);
 $('#save-project-button').click(checkProjectName);
 $('#destroy-project-button').click(deleteProject);
@@ -162,7 +164,7 @@ async function loadProjects() {
 }
 
 function offLineProjectsForDexie(id, title) {
-  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["b" /* saveOfflineProjects */])({ id, title }).then(response => console.log(`successfully loaded: ${response}`)).catch(error => {
+  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["b" /* saveOfflineProjects */])({ id, title }).then(response => console.log(`successfully loaded project: ${response}`)).catch(error => {
     console.log(`failed to load: ${error}`);
   });
 }
@@ -198,6 +200,21 @@ function checkProjectName() {
   });
 }
 
+function offLinePalettesForDexie(palette) {
+  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["a" /* saveOfflinePalettes */])({
+    id: palette.id,
+    name: palette.name,
+    color1: palette.color1,
+    color2: palette.color2,
+    color3: palette.color3,
+    color4: palette.color4,
+    color5: palette.color5,
+    projectId: palette.projectId
+  }).then(response => console.log(`successfully loaded palette: ${response}`)).catch(error => {
+    console.log(`unsuccesfully loaded palette: ${error}`);
+  });
+}
+
 function createPalette() {
   const projectId = $("#project-selector").val();
   const paletteName = $('#save-palette-input').val();
@@ -223,7 +240,10 @@ function createPalette() {
     },
     method: 'POST',
     body: JSON.stringify(postBody)
-  }).then(populateDropDown());
+  }).then(response => response.json()).then(palette => {
+    populateDropDown();
+    offLinePalettesForDexie(palette[0]);
+  });
 }
 
 function appendPalette(palettes) {
@@ -290,8 +310,6 @@ async function populateDropDown() {
 
 populateDropDown();
 
-
-
 //feature detection
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -329,23 +347,25 @@ $('#offline-markdowns').on('change', function (event) {
   setSelectedMarkdown(markdownId);
 });
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
+// if ('serviceWorker' in navigator) {
+//   window.addEventListener('load', () => {
 
-    // Load markdowns from indexedDB
-    Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["a" /* loadOfflineProjects */])();
-    // .then(markdowns => appendMarkdowns(markdowns))
-    // .catch(error => console.log(`Error loading markdowns: ${error}`));
+// loadOfflineProjects()
+// .then(markdowns => appendMarkdowns(markdowns))
+// .catch(error => console.log(`Error loading markdowns: ${error}`));
 
-    // Register a new service worker
-    navigator.serviceWorker.register('./service-worker.js').then(registration => navigator.serviceWorker.ready).then(registration => {
-      Notification.requestPermission();
-      console.log('ServiceWorker registration successful');
-    }).catch(err => {
-      console.log(`ServiceWorker registration failed: ${err}`);
-    });
-  });
-}
+// Register a new service worker
+//     navigator.serviceWorker.register('./service-worker.js')
+//     .then(registration => navigator.serviceWorker.ready)
+//       .then(registration => {
+//         Notification.requestPermission();
+//         console.log('ServiceWorker registration successful');
+//       }).catch(err => {
+//         console.log(`ServiceWorker registration failed: ${err}`);
+//       });
+//
+//   });
+// }
 
 /***/ }),
 /* 2 */
@@ -363,7 +383,6 @@ db.version(1).stores({
 });
 
 const saveOfflineProjects = project => {
-  console.log(project);
   return db.projects.add(project);
 };
 /* harmony export (immutable) */ __webpack_exports__["b"] = saveOfflineProjects;
@@ -372,14 +391,13 @@ const saveOfflineProjects = project => {
 const saveOfflinePalettes = palette => {
   return db.palettes.add(palette);
 };
-/* unused harmony export saveOfflinePalettes */
+/* harmony export (immutable) */ __webpack_exports__["a"] = saveOfflinePalettes;
 
 
-const loadOfflineProjects = () => {
-  console.log('who dis');
-  // return db.markdownFiles.toArray();
-};
-/* harmony export (immutable) */ __webpack_exports__["a"] = loadOfflineProjects;
+// export const loadOfflineProjects = () => {
+// console.log('who dis');
+// return db.markdownFiles.toArray();
+// };
 
 
 // export const getprojects = (id) => {
@@ -411,7 +429,7 @@ const loadOfflineProjects = () => {
  *
  * Apache License Version 2.0, January 2004, http://www.apache.org/licenses/
  */
-
+ 
 var keys = Object.keys;
 var isArray = Array.isArray;
 var _global = typeof self !== 'undefined' ? self :
@@ -1009,7 +1027,7 @@ function promisableChain(f1, f2) {
 //   native async / await.
 // * Promise.follow() method built upon the custom zone engine, that allows user to track all promises created from current stack frame
 //   and below + all promises that those promises creates or awaits.
-// * Detect any unhandled promise in a PSD-scope (PSD.onunhandled).
+// * Detect any unhandled promise in a PSD-scope (PSD.onunhandled). 
 //
 // David Fahlander, https://github.com/dfahlander
 //
@@ -1065,7 +1083,7 @@ var schedulePhysicalTick = resolvedGlobalPromise ?
                 } :
                 // No support for setImmediate or MutationObserver. No worry, setTimeout is only called
                 // once time. Every tick that follows will be our emulated micro tick.
-                // Could have uses setTimeout.bind(null, 0, physicalTick) if it wasnt for that FF13 and below has a bug
+                // Could have uses setTimeout.bind(null, 0, physicalTick) if it wasnt for that FF13 and below has a bug 
                 function () { setTimeout(physicalTick, 0); };
 // Configurable through Promise.scheduler.
 // Don't export because it would be unsafe to let unknown
@@ -1250,7 +1268,7 @@ function Listener(onFulfilled, onRejected, resolve, reject, zone) {
 props(Promise, {
     all: function () {
         var values = getArrayOf.apply(null, arguments) // Supports iterables, implicit arguments and array-like.
-            .map(onPossibleParallellAsync); // Handle parallell async/awaits
+            .map(onPossibleParallellAsync); // Handle parallell async/awaits 
         return new Promise(function (resolve, reject) {
             if (values.length === 0)
                 resolve([]);
@@ -1898,7 +1916,7 @@ var isIEOrEdge = typeof navigator !== 'undefined' && /(MSIE|Trident|Edge)/.test(
 var hasIEDeleteObjectStoreBug = isIEOrEdge;
 var hangsOnDeleteLargeKeyRange = isIEOrEdge;
 var dexieStackFrameFilter = function (frame) { return !/(dexie\.js|dexie\.min\.js)/.test(frame); };
-var dbNamesDB; // Global database for backing Dexie.getDatabaseNames() on browser without indexedDB.webkitGetDatabaseNames()
+var dbNamesDB; // Global database for backing Dexie.getDatabaseNames() on browser without indexedDB.webkitGetDatabaseNames() 
 // Init debug
 setDebug(debug, dexieStackFrameFilter);
 function Dexie(dbName, options) {
@@ -2092,7 +2110,7 @@ function Dexie(dbName, options) {
                 adjustToExistingIndexNames(newSchema, idbtrans);
                 globalSchema = db._dbSchema = newSchema;
                 var diff = getSchemaDiff(oldSchema, newSchema);
-                // Add tables
+                // Add tables           
                 diff.add.forEach(function (tuple) {
                     createTable(idbtrans, tuple[0], tuple[1].primKey, tuple[1].indexes);
                 });
@@ -2298,7 +2316,7 @@ function Dexie(dbName, options) {
         dbOpenError = null;
         openComplete = false;
         // Function pointers to call when the core opening process completes.
-        var resolveDbReady = dbReadyResolve,
+        var resolveDbReady = dbReadyResolve, 
         // upgradeTransaction to abort on failure.
         upgradeTransaction = null;
         return Promise.race([openCanceller, new Promise(function (resolve, reject) {
@@ -2483,7 +2501,7 @@ function Dexie(dbName, options) {
                     // Database already open. Call subscriber asap.
                     if (!dbOpenError)
                         Promise.resolve().then(subscriber);
-                    // bSticky: Also subscribe to future open sucesses (after close / reopen)
+                    // bSticky: Also subscribe to future open sucesses (after close / reopen) 
                     if (bSticky)
                         subscribe(subscriber);
                 }
@@ -2775,7 +2793,7 @@ function Dexie(dbName, options) {
                 return new WhereClause(this, indexOrCrit);
             if (isArray(indexOrCrit))
                 return new WhereClause(this, "[" + indexOrCrit.join('+') + "]");
-            // indexOrCrit is an object map of {[keyPath]:value}
+            // indexOrCrit is an object map of {[keyPath]:value} 
             var keyPaths = keys(indexOrCrit);
             if (keyPaths.length === 1)
                 // Only one critera. This was the easy case:
@@ -4682,7 +4700,7 @@ function getNativeGetDatabaseNamesFn(indexedDB) {
 props(Dexie, fullNameExceptions); // Dexie.XXXError = class XXXError {...};
 //
 // Static methods and properties
-//
+// 
 props(Dexie, {
     //
     // Static delete() method.
@@ -4804,7 +4822,7 @@ props(Dexie, {
     waitFor: function (promiseOrFunction, optionalTimeout) {
         // If a function is provided, invoke it and pass the returning value to Transaction.waitFor()
         var promise = Promise.resolve(typeof promiseOrFunction === 'function' ? Dexie.ignoreTransaction(promiseOrFunction) : promiseOrFunction)
-            .timeout(optionalTimeout || 60000); // Default the timeout to one minute. Caller may specify Infinity if required.
+            .timeout(optionalTimeout || 60000); // Default the timeout to one minute. Caller may specify Infinity if required.       
         // Run given promise on current transaction. If no current transaction, just return a Dexie promise based
         // on given value.
         return PSD.trans ? PSD.trans.waitFor(promise) : promise;

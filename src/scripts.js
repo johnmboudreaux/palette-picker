@@ -1,5 +1,12 @@
 /*eslint-disable */
 
+
+import {
+  saveOfflineProjects,
+  saveOfflinePalettes,
+  loadOfflineProjects
+}  from './indexedDB';
+
 $('#generate-button').click(setAllColors);
 $('#save-project-button').click(checkProjectName);
 $('#destroy-project-button').click(deleteProject);
@@ -64,7 +71,7 @@ async function loadProjects() {
 
 function offLineProjectsForDexie(id, title) {
   saveOfflineProjects({ id, title })
-  .then(response => console.log(`successfully loaded: ${response}`))
+  .then(response => console.log(`successfully loaded project: ${response}`))
   .catch(error => {
     console.log(`failed to load: ${error}`);
   })
@@ -104,6 +111,23 @@ function checkProjectName() {
     });
 }
 
+function offLinePalettesForDexie(palette) {
+  saveOfflinePalettes({
+    id: palette.id,
+    name: palette.name,
+    color1: palette.color1,
+    color2: palette.color2,
+    color3: palette.color3,
+    color4: palette.color4,
+    color5: palette.color5,
+    projectId: palette.projectId
+  })
+  .then(response => console.log(`successfully loaded palette: ${response}`))
+  .catch(error => {
+    console.log(`unsuccesfully loaded palette: ${error}`);
+  })
+}
+
 function createPalette() {
   const projectId = $("#project-selector").val();
   const paletteName = $('#save-palette-input').val();
@@ -129,7 +153,12 @@ function createPalette() {
     },
     method: 'POST',
     body: JSON.stringify(postBody)
-  }).then(populateDropDown());
+  }).then(response => response.json())
+    .then((palette) => {
+    populateDropDown()
+    offLinePalettesForDexie(palette[0])
+  })
+
 }
 
 function appendPalette(palettes) {
@@ -198,18 +227,6 @@ async function populateDropDown() {
 populateDropDown();
 
 
-
-
-
-import {
-  saveOfflineProjects,
-  saveOfflinePalettes,
-  loadOfflineProjects
-}  from './indexedDB';
-
-
-
-
 //feature detection
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -251,23 +268,22 @@ $('#offline-markdowns').on('change', function(event) {
   setSelectedMarkdown(markdownId);
 });
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
+// if ('serviceWorker' in navigator) {
+//   window.addEventListener('load', () => {
 
-    // Load markdowns from indexedDB
-    loadOfflineProjects()
+    // loadOfflineProjects()
       // .then(markdowns => appendMarkdowns(markdowns))
       // .catch(error => console.log(`Error loading markdowns: ${error}`));
 
     // Register a new service worker
-    navigator.serviceWorker.register('./service-worker.js')
-    .then(registration => navigator.serviceWorker.ready)
-      .then(registration => {
-        Notification.requestPermission();
-        console.log('ServiceWorker registration successful');
-      }).catch(err => {
-        console.log(`ServiceWorker registration failed: ${err}`);
-      });
-
-  });
-}
+//     navigator.serviceWorker.register('./service-worker.js')
+//     .then(registration => navigator.serviceWorker.ready)
+//       .then(registration => {
+//         Notification.requestPermission();
+//         console.log('ServiceWorker registration successful');
+//       }).catch(err => {
+//         console.log(`ServiceWorker registration failed: ${err}`);
+//       });
+//
+//   });
+// }

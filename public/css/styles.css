@@ -62,7 +62,7 @@ header  {
 }
 
 .palette-color-container:hover {
-  opacity: .95;
+  /*opacity: .95;*/
 }
 
 .lock {

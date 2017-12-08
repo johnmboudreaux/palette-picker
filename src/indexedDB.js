@@ -8,7 +8,6 @@ db.version(1).stores({
 });
 
 export const saveOfflineProjects = (project) => {
-  console.log(project);
   return db.projects.add(project);
 };
 
@@ -16,10 +15,10 @@ export const saveOfflinePalettes = (palette) => {
   return db.palettes.add(palette);
 };
 
-export const loadOfflineProjects = () => {
-  console.log('who dis');
+// export const loadOfflineProjects = () => {
+  // console.log('who dis');
   // return db.markdownFiles.toArray();
-};
+// };
 
 
 // export const getprojects = (id) => {
