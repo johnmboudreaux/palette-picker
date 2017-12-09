@@ -1,6 +1,4 @@
 /*eslint-disable */
-
-
 import {
   saveOfflineProjects,
   saveOfflinePalettes,
@@ -239,51 +237,3 @@ if ('serviceWorker' in navigator) {
     });
   });//end event listener
 }
-
-const sendMessageToSync = markdown => {
-  navigator.serviceWorker.controller.postMessage({
-    type: 'add-markdown',
-    markdown: markdown
-  })
-}
-
-function offLinePalettes() {
-  saveOfflinePalette({ id, content, title, status: 'pendingSync' })
-    .then(md => {
-      sendMessageToSync({ id, content, title, status: 'pendingSync' })
-      $('#offline-markdowns').val(`md-${id}`);
-    })
-    .catch(error => console.log(`Error saving markdown: ${error}`));
-}
-
-const setSelectedMarkdown = (id) => {
-  getSingleMarkdown(id).then(md => {
-    $('#live-markdown').val(md.content);
-    $('#live-markdown').keyup();
-  }).catch(error => console.log({error}))
-}
-
-$('#offline-markdowns').on('change', function(event) {
-  let markdownId = $(this).val().split('-')[1];
-  setSelectedMarkdown(markdownId);
-});
-
-// if ('serviceWorker' in navigator) {
-//   window.addEventListener('load', () => {
-
-    // loadOfflineProjects()
-      // .then(markdowns => appendMarkdowns(markdowns))
-      // .catch(error => console.log(`Error loading markdowns: ${error}`));
-
-    // Register a new service worker
-//     navigator.serviceWorker.register('./service-worker.js')
-//     .then(registration => navigator.serviceWorker.ready)
-//       .then(registration => {
-//         Notification.requestPermission();
-//         console.log('ServiceWorker registration successful');
-//       }).catch(err => {
-//         console.log(`ServiceWorker registration failed: ${err}`);
-//       });
-//
-//   });
-// }
