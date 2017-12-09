@@ -19,16 +19,3 @@ export const saveOfflinePalettes = (palette) => {
   // console.log('who dis');
   // return db.markdownFiles.toArray();
 // };
-
-
-// export const getprojects = (id) => {
-//   return db.projects.get(parseInt(id));
-// };
-//
-// export const getSinglePalette = (id) => {
-//   return db.projects.get(parseInt(id));
-// };
-//
-// export const loadOfflinePalettes = () => {
-//   return db.markdownFiles.toArray();
-// };
