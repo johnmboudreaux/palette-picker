@@ -163,8 +163,10 @@ function createPalette() {
 function appendPalette(palettes) {
   $('#projects').html('');
   palettes.forEach((palette) => {
-    return fetch(`/api/v1/projects/${palette.id}/palette`).then(response => response.json()).then(parsedResponse => {
-    loadProjectList(palette, parsedResponse)
+    return fetch(`/api/v1/projects/${palette.id}/palette`)
+      .then(response => response.json())
+      .then(parsedResponse => {
+        loadProjectList(palette, parsedResponse)
     })
     .catch(() => {
       loadOfflinePalettes(palette.id)
