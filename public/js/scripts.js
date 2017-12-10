@@ -163,7 +163,7 @@ async function loadProjects() {
 }
 
 function offLineProjectsForDexie(id, title) {
-  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["b" /* saveOfflineProjects */])({ id, title }).then(response => console.log(`successfully loaded project: ${response}`)).catch(error => {
+  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["d" /* saveOfflineProjects */])({ id, title }).then(response => console.log(`successfully loaded project: ${response}`)).catch(error => {
     console.log(`failed to load: ${error}`);
   });
 }
@@ -200,7 +200,7 @@ function checkProjectName() {
 }
 
 function offLinePalettesForDexie(palette) {
-  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["a" /* saveOfflinePalettes */])({
+  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["c" /* saveOfflinePalettes */])({
     id: palette.id,
     name: palette.name,
     color1: palette.color1,
@@ -248,28 +248,36 @@ function createPalette() {
 function appendPalette(palettes) {
   $('#projects').html('');
   palettes.forEach(palette => {
-    return fetch(`/api/v1/projects/${palette.id}/palettes`).then(response => response.json()).then(parsedResponse => {
-      $('#projects').append(`
-          <h5 id="palette-${palette.id}">${palette.title}</h5>
-          <div class="color-palette" id="project-palette${palette.id}">
-          </div>`);
-      if (parsedResponse) {
-        parsedResponse.forEach(item => {
-          $('#project-palette' + palette.id).append(`<div class="dynamic-swatch-container">
-              <h5 class="swatch-title">${item.name}</h5>
-              <div class="colors">
-                <div class="color-swatch select-main-palette1 left-border" style="background: ${item.color1}"></div>
-                <div class="color-swatch select-main-palette2" style="background: ${item.color2}"></div>
-                <div class="color-swatch select-main-palette3" style="background: ${item.color3}"></div>
-                <div class="color-swatch select-main-palette4" style="background: ${item.color4}"></div>
-                <div class="color-swatch select-main-palette5 right-border" style="background: ${item.color5}"></div>
-                <button class="delete-button" id="swatch-delete-button" data-palette-id="${item.id}">X</button>
-              </div>
-            </div>`);
-        });
-      }
+    return fetch(`/api/v1/projects/${palette.id}/palette`).then(response => response.json()).then(parsedResponse => {
+      loadProjectList(palette, parsedResponse);
+    }).catch(() => {
+      Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["a" /* loadOfflinePalettes */])(palette.id).then(response => {
+        loadProjectList(palette, response);
+      });
     });
   });
+}
+
+function loadProjectList(palette, parsedResponse) {
+  $('#projects').append(`
+      <h5 id="palette-${palette.id}">${palette.title}</h5>
+      <div class="color-palette" id="project-palette${palette.id}">
+      </div>`);
+  if (parsedResponse) {
+    parsedResponse.forEach(item => {
+      $('#project-palette' + palette.id).append(`<div class="dynamic-swatch-container">
+          <h5 class="swatch-title">${item.name}</h5>
+          <div class="colors">
+            <div class="color-swatch select-main-palette1 left-border" style="background: ${item.color1}"></div>
+            <div class="color-swatch select-main-palette2" style="background: ${item.color2}"></div>
+            <div class="color-swatch select-main-palette3" style="background: ${item.color3}"></div>
+            <div class="color-swatch select-main-palette4" style="background: ${item.color4}"></div>
+            <div class="color-swatch select-main-palette5 right-border" style="background: ${item.color5}"></div>
+            <button class="delete-button" id="swatch-delete-button" data-palette-id="${item.id}">X</button>
+          </div>
+        </div>`);
+    });
+  }
 }
 
 function deletePalette(event) {
@@ -282,7 +290,13 @@ function deletePalette(event) {
 function getProjects() {
   return fetch('/api/v1/projects').then(response => response.json()).then(parsedResponse => {
     return parsedResponse;
-  }).catch(error => console.log(error));
+  }).catch(error => {
+    console.log(error);
+    // loads projects from indexdb when offline
+    return Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["b" /* loadOfflineProjects */])().then(response => {
+      return response;
+    });
+  });
 }
 
 async function deleteProject() {
@@ -338,19 +352,26 @@ db.version(1).stores({
 const saveOfflineProjects = project => {
   return db.projects.add(project);
 };
-/* harmony export (immutable) */ __webpack_exports__["b"] = saveOfflineProjects;
+/* harmony export (immutable) */ __webpack_exports__["d"] = saveOfflineProjects;
 
 
 const saveOfflinePalettes = palette => {
   return db.palettes.add(palette);
 };
-/* harmony export (immutable) */ __webpack_exports__["a"] = saveOfflinePalettes;
+/* harmony export (immutable) */ __webpack_exports__["c"] = saveOfflinePalettes;
 
 
-// export const loadOfflineProjects = () => {
-// console.log('who dis');
-// return db.markdownFiles.toArray();
-// };
+const loadOfflineProjects = () => {
+  return db.projects.toArray();
+};
+/* harmony export (immutable) */ __webpack_exports__["b"] = loadOfflineProjects;
+
+
+const loadOfflinePalettes = id => {
+  return db.palettes.where('projectId').equals(id).toArray();
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = loadOfflinePalettes;
+
 
 /***/ }),
 /* 3 */

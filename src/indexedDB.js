@@ -15,7 +15,10 @@ export const saveOfflinePalettes = (palette) => {
   return db.palettes.add(palette);
 };
 
-// export const loadOfflineProjects = () => {
-  // console.log('who dis');
-  // return db.markdownFiles.toArray();
-// };
+export const loadOfflineProjects = () => {
+  return db.projects.toArray();
+};
+
+export const loadOfflinePalettes = (id) => {
+  return db.palettes.where('projectId').equals(id).toArray();
+};

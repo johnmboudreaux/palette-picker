@@ -39,13 +39,7 @@ app.get('/api/v1/projects/:id/palette', (request, response) => {
 
   database('palettes').where('projectId', projectId).select()
     .then(palette => {
-      if (palette.length) {
         return response.status(200).json(palette);
-      } else {
-        return response.status(404).json({
-          error: `Palette with id: ${projectId} not found`
-        });
-      }
     })
     .catch( error => {
       return response.status(500).json({ error });
