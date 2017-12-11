@@ -175,15 +175,11 @@ function appendPalette(palettes) {
       .then(parsedResponse => {
         loadProjectList(palette, parsedResponse)
     })
-      .catch(() => {
-        console.log('line 181', error);
-
-        // was debugging projects before working on palettes
-
-        // loadOfflinePalettes(palette.id)
-        // .then(response => {
-        //   loadProjectList(palette, response)
-      // })
+      .catch((error) => {
+        loadOfflinePalettes(palette.id)
+        .then(response => {
+          loadProjectList(palette, response)
+      })
     })
   });
 }
@@ -222,7 +218,6 @@ function getProjects() {
     .then(response => response.json())
     .then(parsedResponse => parsedResponse)
     .catch(error => {
-      console.log(error);
       return loadProjectsForDexie();
   });
 }
@@ -239,6 +234,7 @@ async function populateDropDown() {
   const optionList = $('#project-selector');
   const deleteOptionList = $('#delete-project-selector');
   const options = await getProjects();
+  console.log('options', options);
   appendPalette(options);
   optionList.html('');
   deleteOptionList.html('');

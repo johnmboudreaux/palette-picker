@@ -163,7 +163,7 @@ async function loadProjects() {
 }
 
 function offLineProjectsForDexie(id, title) {
-  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["c" /* saveOfflineProjects */])({ id, title }).then(response => console.log(`successfully loaded project: ${response}`)).catch(error => console.log(`failed to load: ${error}`));
+  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["d" /* saveOfflineProjects */])({ id, title }).then(response => console.log(`successfully loaded project: ${response}`)).catch(error => console.log(`failed to load: ${error}`));
 }
 
 function setProject(projectName) {
@@ -198,7 +198,7 @@ function checkProjectName() {
 }
 
 function offLinePalettesForDexie(palette) {
-  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["b" /* saveOfflinePalettes */])({
+  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["c" /* saveOfflinePalettes */])({
     id: palette.id,
     name: palette.name,
     color1: palette.color1,
@@ -257,15 +257,10 @@ function appendPalette(palettes) {
   palettes.forEach(palette => {
     return fetch(`/api/v1/projects/${palette.id}/palette`).then(response => response.json()).then(parsedResponse => {
       loadProjectList(palette, parsedResponse);
-    }).catch(() => {
-      console.log('line 181', error);
-
-      // was debugging projects before working on palettes
-
-      // loadOfflinePalettes(palette.id)
-      // .then(response => {
-      //   loadProjectList(palette, response)
-      // })
+    }).catch(error => {
+      Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["a" /* loadOfflinePalettes */])(palette.id).then(response => {
+        loadProjectList(palette, response);
+      });
     });
   });
 }
@@ -293,12 +288,11 @@ function loadProjectList(palette, parsedResponse) {
 }
 
 function loadProjectsForDexie() {
-  return Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["a" /* loadOfflineProjects */])().then(projects => projects).catch(error => console.log('dexie projects did not load', error));
+  return Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["b" /* loadOfflineProjects */])().then(projects => projects).catch(error => console.log('dexie projects did not load', error));
 }
 
 function getProjects() {
   return fetch('/api/v1/projects').then(response => response.json()).then(parsedResponse => parsedResponse).catch(error => {
-    console.log(error);
     return loadProjectsForDexie();
   });
 }
@@ -314,6 +308,7 @@ async function populateDropDown() {
   const optionList = $('#project-selector');
   const deleteOptionList = $('#delete-project-selector');
   const options = await getProjects();
+  console.log('options', options);
   appendPalette(options);
   optionList.html('');
   deleteOptionList.html('');
@@ -354,25 +349,25 @@ db.version(1).stores({
 const saveOfflineProjects = project => {
   return db.projects.add(project);
 };
-/* harmony export (immutable) */ __webpack_exports__["c"] = saveOfflineProjects;
+/* harmony export (immutable) */ __webpack_exports__["d"] = saveOfflineProjects;
 
 
 const saveOfflinePalettes = palette => {
   return db.palettes.add(palette);
 };
-/* harmony export (immutable) */ __webpack_exports__["b"] = saveOfflinePalettes;
+/* harmony export (immutable) */ __webpack_exports__["c"] = saveOfflinePalettes;
 
 
 const loadOfflineProjects = () => {
   return db.projects.toArray();
 };
-/* harmony export (immutable) */ __webpack_exports__["a"] = loadOfflineProjects;
+/* harmony export (immutable) */ __webpack_exports__["b"] = loadOfflineProjects;
 
 
 const loadOfflinePalettes = id => {
   return db.palettes.where('projectId').equals(id).toArray();
 };
-/* unused harmony export loadOfflinePalettes */
+/* harmony export (immutable) */ __webpack_exports__["a"] = loadOfflinePalettes;
 
 
 /***/ }),
