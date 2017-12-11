@@ -308,7 +308,6 @@ async function populateDropDown() {
   const optionList = $('#project-selector');
   const deleteOptionList = $('#delete-project-selector');
   const options = await getProjects();
-  console.log('options', options);
   appendPalette(options);
   optionList.html('');
   deleteOptionList.html('');
