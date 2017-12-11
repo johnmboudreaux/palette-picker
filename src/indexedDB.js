@@ -1,6 +1,6 @@
 import Dexie from 'dexie';
 
-let db = new Dexie('jm-palette-picket');
+let db = new Dexie('jm-palette-picker');
 
 db.version(1).stores({
   projects: 'id, title',

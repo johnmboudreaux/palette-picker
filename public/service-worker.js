@@ -1,6 +1,6 @@
 this.addEventListener('install', event => { //this in this file will always ref service worker cana also use 'self'
   event.waitUntil(
-    caches.open('assets-v1').then(cache => {
+    caches.open('assets-v2').then(cache => {
       return cache.addAll([
         '/',
         '/js/scripts.js',
@@ -23,7 +23,7 @@ this.addEventListener('fetch', event => {
 });
 
 this.addEventListener('activate', event => {
-  var cacheWhitelist = ['assets-v1'];
+  var cacheWhitelist = ['assets-v2'];
   event.waitUntil(
     caches.keys().then(function (keyList) {
       return Promise.all(keyList.map(function (key) {

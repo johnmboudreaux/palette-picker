@@ -159,13 +159,11 @@ function selectToDisplayMainPalette(eventTarget) {
 }
 
 async function loadProjects() {
-  const allProjects = await getProjects();
+  populateDropDown();
 }
 
 function offLineProjectsForDexie(id, title) {
-  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["d" /* saveOfflineProjects */])({ id, title }).then(response => console.log(`successfully loaded project: ${response}`)).catch(error => {
-    console.log(`failed to load: ${error}`);
-  });
+  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["c" /* saveOfflineProjects */])({ id, title }).then(response => console.log(`successfully loaded project: ${response}`)).catch(error => console.log(`failed to load: ${error}`));
 }
 
 function setProject(projectName) {
@@ -182,8 +180,8 @@ function setProject(projectName) {
     body: JSON.stringify(postBody)
   }).then(response => response.json()).then(project => {
     populateDropDown();
-    offLineProjectsForDexie(project[0].id, project[0].title);
   });
+  offLineProjectsForDexie(Date.now(), projectName);
 }
 
 function checkProjectName() {
@@ -200,7 +198,7 @@ function checkProjectName() {
 }
 
 function offLinePalettesForDexie(palette) {
-  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["c" /* saveOfflinePalettes */])({
+  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["b" /* saveOfflinePalettes */])({
     id: palette.id,
     name: palette.name,
     color1: palette.color1,
@@ -241,8 +239,17 @@ function createPalette() {
     body: JSON.stringify(postBody)
   }).then(response => response.json()).then(palette => {
     populateDropDown();
-    offLinePalettesForDexie(palette[0]);
+  }).catch(error => {
+    console.log(error);
   });
+  offLinePalettesForDexie(palette[0]);
+}
+
+function deletePalette(event) {
+  let paletteId = $(event.target).attr('data-palette-id');
+  fetch(`/api/v1/palettes/${paletteId}`, { method: 'DELETE' }).then(response => {
+    populateDropDown(response);
+  }).catch(error => console.log(error));
 }
 
 function appendPalette(palettes) {
@@ -251,9 +258,14 @@ function appendPalette(palettes) {
     return fetch(`/api/v1/projects/${palette.id}/palette`).then(response => response.json()).then(parsedResponse => {
       loadProjectList(palette, parsedResponse);
     }).catch(() => {
-      Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["a" /* loadOfflinePalettes */])(palette.id).then(response => {
-        loadProjectList(palette, response);
-      });
+      console.log('line 181', error);
+
+      // was debugging projects before working on palettes
+
+      // loadOfflinePalettes(palette.id)
+      // .then(response => {
+      //   loadProjectList(palette, response)
+      // })
     });
   });
 }
@@ -280,29 +292,21 @@ function loadProjectList(palette, parsedResponse) {
   }
 }
 
-function deletePalette(event) {
-  let paletteId = $(event.target).attr('data-palette-id');
-  fetch(`/api/v1/palettes/${paletteId}`, { method: 'DELETE' }).then(response => {
-    populateDropDown(response);
-  }).catch(error => console.log(error));
+function loadProjectsForDexie() {
+  return Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["a" /* loadOfflineProjects */])().then(projects => projects).catch(error => console.log('dexie projects did not load', error));
 }
 
 function getProjects() {
-  return fetch('/api/v1/projects').then(response => response.json()).then(parsedResponse => {
-    return parsedResponse;
-  }).catch(error => {
+  return fetch('/api/v1/projects').then(response => response.json()).then(parsedResponse => parsedResponse).catch(error => {
     console.log(error);
-    // loads projects from indexdb when offline
-    return Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["b" /* loadOfflineProjects */])().then(response => {
-      return response;
-    });
+    return loadProjectsForDexie();
   });
 }
 
 async function deleteProject() {
   const projectId = $('#delete-project-selector').val();
   fetch(`/api/v1/projects/${projectId}`, { method: 'DELETE' }).then(response => {
-    populateDropDown(response);
+    populateDropDown();
   }).catch(error => console.log(error));
 }
 
@@ -320,8 +324,6 @@ async function populateDropDown() {
     deleteOptionList.append(`<option value="${option.id}">${option.title}</option>`);
   });
 }
-
-populateDropDown();
 
 //feature detection
 if ('serviceWorker' in navigator) {
@@ -342,7 +344,7 @@ if ('serviceWorker' in navigator) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_dexie__ = __webpack_require__(3);
 
 
-let db = new __WEBPACK_IMPORTED_MODULE_0_dexie__["a" /* default */]('jm-palette-picket');
+let db = new __WEBPACK_IMPORTED_MODULE_0_dexie__["a" /* default */]('jm-palette-picker');
 
 db.version(1).stores({
   projects: 'id, title',
@@ -352,25 +354,25 @@ db.version(1).stores({
 const saveOfflineProjects = project => {
   return db.projects.add(project);
 };
-/* harmony export (immutable) */ __webpack_exports__["d"] = saveOfflineProjects;
+/* harmony export (immutable) */ __webpack_exports__["c"] = saveOfflineProjects;
 
 
 const saveOfflinePalettes = palette => {
   return db.palettes.add(palette);
 };
-/* harmony export (immutable) */ __webpack_exports__["c"] = saveOfflinePalettes;
+/* harmony export (immutable) */ __webpack_exports__["b"] = saveOfflinePalettes;
 
 
 const loadOfflineProjects = () => {
   return db.projects.toArray();
 };
-/* harmony export (immutable) */ __webpack_exports__["b"] = loadOfflineProjects;
+/* harmony export (immutable) */ __webpack_exports__["a"] = loadOfflineProjects;
 
 
 const loadOfflinePalettes = id => {
   return db.palettes.where('projectId').equals(id).toArray();
 };
-/* harmony export (immutable) */ __webpack_exports__["a"] = loadOfflinePalettes;
+/* unused harmony export loadOfflinePalettes */
 
 
 /***/ }),

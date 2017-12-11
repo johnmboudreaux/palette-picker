@@ -65,15 +65,13 @@ function selectToDisplayMainPalette(eventTarget) {
 }
 
 async function loadProjects() {
-  const allProjects = await getProjects();
+  populateDropDown();
 }
 
 function offLineProjectsForDexie(id, title) {
   saveOfflineProjects({ id, title })
   .then(response => console.log(`successfully loaded project: ${response}`))
-  .catch(error => {
-    console.log(`failed to load: ${error}`);
-  })
+  .catch(error => console.log(`failed to load: ${error}`))
 }
 
 function setProject(projectName) {
@@ -91,8 +89,8 @@ function setProject(projectName) {
   }).then(response => response.json())
     .then(project => {
     populateDropDown();
-    offLineProjectsForDexie(project[0].id, project[0].title)
   });
+  offLineProjectsForDexie(Date.now(), projectName);
 }
 
 function checkProjectName() {
@@ -154,10 +152,19 @@ function createPalette() {
     body: JSON.stringify(postBody)
   }).then(response => response.json())
     .then((palette) => {
-    populateDropDown()
-    offLinePalettesForDexie(palette[0])
+    populateDropDown();
   })
+  .catch(error => {
+    console.log(error);
+  })
+  offLinePalettesForDexie(palette[0]);
+}
 
+function deletePalette(event) {
+  let paletteId = $(event.target).attr('data-palette-id');
+  fetch(`/api/v1/palettes/${paletteId}`, {method: 'DELETE'}).then(response => {
+    populateDropDown(response);
+  }).catch(error => console.log(error));
 }
 
 function appendPalette(palettes) {
@@ -168,11 +175,15 @@ function appendPalette(palettes) {
       .then(parsedResponse => {
         loadProjectList(palette, parsedResponse)
     })
-    .catch(() => {
-      loadOfflinePalettes(palette.id)
-      .then(response => {
-        loadProjectList(palette, response)
-      })
+      .catch(() => {
+        console.log('line 181', error);
+
+        // was debugging projects before working on palettes
+
+        // loadOfflinePalettes(palette.id)
+        // .then(response => {
+        //   loadProjectList(palette, response)
+      // })
     })
   });
 }
@@ -200,33 +211,27 @@ function loadProjectList(palette, parsedResponse) {
   }
 }
 
-function deletePalette(event) {
-  let paletteId = $(event.target).attr('data-palette-id');
-  fetch(`/api/v1/palettes/${paletteId}`, {method: 'DELETE'}).then(response => {
-    populateDropDown(response);
-  }).catch(error => console.log(error));
+function loadProjectsForDexie() {
+  return loadOfflineProjects()
+    .then(projects => projects)
+    .catch(error => console.log('dexie projects did not load', error))
 }
 
 function getProjects() {
   return fetch('/api/v1/projects')
     .then(response => response.json())
-    .then(parsedResponse => {
-      return parsedResponse;
-  }).catch(error => {
-    console.log(error);
-    // loads projects from indexdb when offline
-    return loadOfflineProjects()
-      .then(response => {
-      return response;
-    });
-  })
+    .then(parsedResponse => parsedResponse)
+    .catch(error => {
+      console.log(error);
+      return loadProjectsForDexie();
+  });
 }
 
 async function deleteProject() {
   const projectId = $('#delete-project-selector').val();
-  fetch(`/api/v1/projects/${projectId}`, {method: 'DELETE'})
+  fetch(`/api/v1/projects/${projectId}`, { method: 'DELETE' })
     .then(response => {
-      populateDropDown(response);
+      populateDropDown();
   }).catch(error => console.log(error));
 }
 
@@ -244,8 +249,6 @@ async function populateDropDown() {
     deleteOptionList.append(`<option value="${option.id}">${option.title}</option>`);
   });
 }
-
-populateDropDown();
 
 
 //feature detection
